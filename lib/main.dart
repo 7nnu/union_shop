@@ -35,6 +35,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String activeNav = 'Home'; // track which nav is active
+  final Map<String, bool> _hovering = {}; // track hover state for nav items
+
+  void _setHover(String name, bool val) {
+    setState(() {
+      _hovering[name] = val;
+    });
+  }
 
   void setActive(String name) {
     setState(() {
@@ -135,122 +142,157 @@ class _HomeScreenState extends State<HomeScreen> {
                                     final useRow = true; // keep horizontal for now
 
                                     final navItems = <Widget>[
-                                      SizedBox(
-                                        height: 36,
-                                        child: TextButton(
-                                          onPressed: () => navigateToHome(context),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                                            minimumSize: const Size(0, 36),
-                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          ),
-                                          child: Text(
-                                            'Home',
-                                            style: TextStyle(
-                                              decoration: activeNav == 'Home' ? TextDecoration.underline : TextDecoration.none,
-                                              color: Colors.black,
+                                      // Home (hover + active underline)
+                                      MouseRegion(
+                                        onEnter: (_) => _setHover('Home', true),
+                                        onExit: (_) => _setHover('Home', false),
+                                        child: SizedBox(
+                                          height: 36,
+                                          child: TextButton(
+                                            onPressed: () => navigateToHome(context),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                                              minimumSize: const Size(0, 36),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            ),
+                                            child: Text(
+                                              'Home',
+                                              style: TextStyle(
+                                                decoration: (activeNav == 'Home' || (_hovering['Home'] ?? false))
+                                                    ? TextDecoration.underline
+                                                    : TextDecoration.none,
+                                                color: Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
 
-                                      SizedBox(
-                                        height: 36,
-                                        child: PopupMenuButton<String>(
-                                          onSelected: (v) {
-                                            setActive('Shop');
-                                            placeholderCallbackForButtons();
-                                          },
-                                          itemBuilder: (_) => const [
-                                            PopupMenuItem(value: 'clothing', child: Text('Clothing')),
-                                            PopupMenuItem(value: 'accessories', child: Text('Accessories')),
-                                            PopupMenuItem(value: 'prints', child: Text('Prints')),
-                                          ],
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  'Shop',
-                                                  style: TextStyle(
-                                                    decoration: activeNav == 'Shop' ? TextDecoration.underline : TextDecoration.none,
-                                                    color: Colors.black,
+                                      // Shop (popup) with hover underline
+                                      MouseRegion(
+                                        onEnter: (_) => _setHover('Shop', true),
+                                        onExit: (_) => _setHover('Shop', false),
+                                        child: SizedBox(
+                                          height: 36,
+                                          child: PopupMenuButton<String>(
+                                            onSelected: (v) {
+                                              setActive('Shop');
+                                              placeholderCallbackForButtons();
+                                            },
+                                            itemBuilder: (_) => const [
+                                              PopupMenuItem(value: 'clothing', child: Text('Clothing')),
+                                              PopupMenuItem(value: 'accessories', child: Text('Accessories')),
+                                              PopupMenuItem(value: 'prints', child: Text('Prints')),
+                                            ],
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    'Shop',
+                                                    style: TextStyle(
+                                                      decoration: (activeNav == 'Shop' || (_hovering['Shop'] ?? false))
+                                                          ? TextDecoration.underline
+                                                          : TextDecoration.none,
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
-                                              ],
+                                                  const SizedBox(width: 4),
+                                                  const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
 
-                                      SizedBox(
-                                        height: 36,
-                                        child: PopupMenuButton<String>(
-                                          onSelected: (v) {
-                                            setActive('The Print Shack');
-                                            placeholderCallbackForButtons();
-                                          },
-                                          itemBuilder: (_) => const [
-                                            PopupMenuItem(value: 'services', child: Text('Services')),
-                                            PopupMenuItem(value: 'pricing', child: Text('Pricing')),
-                                          ],
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  'The Print Shack',
-                                                  style: TextStyle(
-                                                    decoration: activeNav == 'The Print Shack' ? TextDecoration.underline : TextDecoration.none,
-                                                    color: Colors.black,
+                                      // The Print Shack (popup) with hover underline
+                                      MouseRegion(
+                                        onEnter: (_) => _setHover('The Print Shack', true),
+                                        onExit: (_) => _setHover('The Print Shack', false),
+                                        child: SizedBox(
+                                          height: 36,
+                                          child: PopupMenuButton<String>(
+                                            onSelected: (v) {
+                                              setActive('The Print Shack');
+                                              placeholderCallbackForButtons();
+                                            },
+                                            itemBuilder: (_) => const [
+                                              PopupMenuItem(value: 'services', child: Text('Services')),
+                                              PopupMenuItem(value: 'pricing', child: Text('Pricing')),
+                                            ],
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    'The Print Shack',
+                                                    style: TextStyle(
+                                                      decoration: (activeNav == 'The Print Shack' || (_hovering['The Print Shack'] ?? false))
+                                                          ? TextDecoration.underline
+                                                          : TextDecoration.none,
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
-                                              ],
+                                                  const SizedBox(width: 4),
+                                                  const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
 
-                                      SizedBox(
-                                        height: 36,
-                                        child: TextButton(
-                                          onPressed: () => setActive('SALE!'),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                                            minimumSize: const Size(0, 36),
-                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          ),
-                                          child: Text(
-                                            'SALE!',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.bold,
-                                              decoration: activeNav == 'SALE!' ? TextDecoration.underline : TextDecoration.none,
+                                      // SALE! with hover underline
+                                      MouseRegion(
+                                        onEnter: (_) => _setHover('SALE!', true),
+                                        onExit: (_) => _setHover('SALE!', false),
+                                        child: SizedBox(
+                                          height: 36,
+                                          child: TextButton(
+                                            onPressed: () => setActive('SALE!'),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                                              minimumSize: const Size(0, 36),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            ),
+                                            child: Text(
+                                              'SALE!',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                decoration: (activeNav == 'SALE!' || (_hovering['SALE!'] ?? false))
+                                                    ? TextDecoration.underline
+                                                    : TextDecoration.none,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
 
-                                      SizedBox(
-                                        height: 36,
-                                        child: TextButton(
-                                          onPressed: () => setActive('About'),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                                            minimumSize: const Size(0, 36),
-                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          ),
-                                          child: Text(
-                                            'About',
-                                            style: TextStyle(
-                                              decoration: activeNav == 'About' ? TextDecoration.underline : TextDecoration.none,
-                                              color: Colors.black,
+                                      // About with hover underline
+                                      MouseRegion(
+                                        onEnter: (_) => _setHover('About', true),
+                                        onExit: (_) => _setHover('About', false),
+                                        child: SizedBox(
+                                          height: 36,
+                                          child: TextButton(
+                                            onPressed: () => setActive('About'),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                                              minimumSize: const Size(0, 36),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            ),
+                                            child: Text(
+                                              'About',
+                                              style: TextStyle(
+                                                decoration: (activeNav == 'About' || (_hovering['About'] ?? false))
+                                                    ? TextDecoration.underline
+                                                    : TextDecoration.none,
+                                                color: Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
