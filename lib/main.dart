@@ -49,19 +49,19 @@ class HomeScreen extends StatelessWidget {
           children: [
             // Header
             Container(
-              height: 100,
+              height: 175,
               color: Colors.white,
               child: Column(
                 children: [
                   // Top banner
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                     color: const Color(0xFF4d2963),
                     child: const Text(
                       'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                     ),
                   ),
                   // Main header
@@ -93,60 +93,64 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const Spacer(),
                           ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 600),
+                            constraints: const BoxConstraints(maxWidth: 800),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                // text navigation buttons
+                                TextButton(
+                                  onPressed: placeholderCallbackForButtons,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                  ),
+                                  child: const Text('Shop'),
+                                ),
+                                TextButton(
+                                  onPressed: placeholderCallbackForButtons,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    textStyle: const TextStyle(fontSize: 16),
+                                  ),
+                                  child: const Text('About'),
+                                ),
+                                TextButton(
+                                  onPressed: placeholderCallbackForButtons,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    textStyle: const TextStyle(fontSize: 16),
+                                  ),
+                                  child: const Text('Contact'),
+                                ),
+
+                                const SizedBox(width: 12),
+
+                                // existing icon buttons
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.search,
-                                    size: 24,
-                                    color: Colors.black,
-                                  ),
+                                  icon: const Icon(Icons.search, size: 24, color: Colors.black),
                                   padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 32,
-                                    minHeight: 32,
-                                  ),
+                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.person_outline,
-                                    size: 24,
-                                    color: Colors.black,
-                                  ),
+                                  icon: const Icon(Icons.person_outline, size: 24, color: Colors.black),
                                   padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 32,
-                                    minHeight: 32,
-                                  ),
+                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.shopping_bag_outlined,
-                                    size: 24,
-                                    color: Colors.black,
-                                  ),
+                                  icon: const Icon(Icons.shopping_bag_outlined, size: 24, color: Colors.black),
                                   padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 32,
-                                    minHeight: 32,
-                                  ),
+                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.menu,
-                                    size: 18,
-                                    color: Colors.black,
-                                  ),
+                                  icon: const Icon(Icons.menu, size: 18, color: Colors.black),
                                   padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 32,
-                                    minHeight: 32,
-                                  ),
+                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
                               ],
@@ -162,7 +166,7 @@ class HomeScreen extends StatelessWidget {
 
             // Hero Section
             SizedBox(
-              height: 400,
+              height: 475,
               width: double.infinity,
               child: Stack(
                 children: [
@@ -172,14 +176,14 @@ class HomeScreen extends StatelessWidget {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: NetworkImage(
-                            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+                            'https://shop.upsu.net/cdn/shop/files/Signature_T-Shirt_Indigo_Blue_2_2048x.jpg?v=1758290534',
                           ),
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: Colors.black.withValues(alpha: 0.3),
                         ),
                       ),
                     ),
@@ -193,21 +197,24 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text(
-                          'Placeholder Hero Title',
+                          'Essential Range - Over 20% OFF!',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 32,
+                            fontSize: 65,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             height: 1.2,
+                            fontFamily: '',
                           ),
                         ),
                         const SizedBox(height: 16),
                         const Text(
-                          "This is placeholder text for the hero section.",
+                          "Over 20% off our Essential Range. Come and grab yours while stock lasts!",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 24,
                             color: Colors.white,
                             height: 1.5,
+                            fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -222,8 +229,8 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            'BROWSE PRODUCTS',
-                            style: TextStyle(fontSize: 14, letterSpacing: 1),
+                            'BROWSE COLLECTION',
+                            style: TextStyle(fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
