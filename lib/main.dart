@@ -100,8 +100,8 @@ class HomeScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(
                                     Icons.search,
-                                    size: 18,
-                                    color: Colors.grey,
+                                    size: 24,
+                                    color: Colors.black,
                                   ),
                                   padding: const EdgeInsets.all(8),
                                   constraints: const BoxConstraints(
@@ -113,8 +113,8 @@ class HomeScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(
                                     Icons.person_outline,
-                                    size: 18,
-                                    color: Colors.grey,
+                                    size: 24,
+                                    color: Colors.black,
                                   ),
                                   padding: const EdgeInsets.all(8),
                                   constraints: const BoxConstraints(
@@ -126,8 +126,8 @@ class HomeScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(
                                     Icons.shopping_bag_outlined,
-                                    size: 18,
-                                    color: Colors.grey,
+                                    size: 24,
+                                    color: Colors.black,
                                   ),
                                   padding: const EdgeInsets.all(8),
                                   constraints: const BoxConstraints(
@@ -140,7 +140,7 @@ class HomeScreen extends StatelessWidget {
                                   icon: const Icon(
                                     Icons.menu,
                                     size: 18,
-                                    color: Colors.grey,
+                                    color: Colors.black,
                                   ),
                                   padding: const EdgeInsets.all(8),
                                   constraints: const BoxConstraints(
