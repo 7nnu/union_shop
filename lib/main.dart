@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/views/custom_header.dart';
+import 'package:union_shop/views/custom_footer.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -303,20 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 // Footer
-                Container(
-                  width: double.infinity,
-                  color: Colors.grey[50],
-                  padding: const EdgeInsets.all(24),
-                  child: const Text(
-                    'Placeholder Footer',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                const CustomFooter(),
               ],
             ),
           ),
