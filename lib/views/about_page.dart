@@ -30,14 +30,13 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   void navigateToAbout(BuildContext context) {
-    // already on about - no-op or could pop to this route
+    // already on about - no-op
   }
 
   void placeholderCallbackForButtons() {
     // placeholder
   }
 
-  // Minimal drawer content reused locally (keeps About page mobile menu usable)
   Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
     final children = <Widget>[];
     if (showTopIcons) {
@@ -130,9 +129,8 @@ class _AboutPageState extends State<AboutPage> {
                   navigateToAbout: navigateToAbout,
                 ),
 
-                // Page content: centered and larger typography
+                // Centered, larger About content
                 SizedBox(
-                  // ensure the content sits centered within the visible area below the header
                   height: math.max(remainingHeight - 120.0, 520.0),
                   child: Center(
                     child: ConstrainedBox(
@@ -148,7 +146,7 @@ class _AboutPageState extends State<AboutPage> {
                                 'About us',
                                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: isMobile ? 28 : 44, // larger headline
+                                      fontSize: isMobile ? 28 : 44,
                                     ),
                               ),
                             ),
@@ -198,7 +196,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
 
-          // mobile slide-down menu (keeps same behaviour as HomeScreen)
+          // mobile slide-down menu
           if (_mobileMenuOpen)
             Positioned(
               top: headerHeight,
