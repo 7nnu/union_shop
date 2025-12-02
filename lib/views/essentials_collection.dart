@@ -108,6 +108,11 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
     final products = _computeList();
+    // compact styles for mobile filter/sort bar
+    final labelStyle = TextStyle(fontSize: isMobile ? 10 : 12, color: Colors.grey);
+    final dropdownTextStyle = TextStyle(fontSize: isMobile ? 12 : 14, color: Colors.black);
+    final dropdownIconSize = isMobile ? 18.0 : 24.0;
+    final smallGap = isMobile ? 8.0 : 24.0;
 
     return Scaffold(
       drawer: _buildDrawer(context),
@@ -150,23 +155,30 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                     child: Row(
                       children: [
                         // Filter
-                        const Text('FILTER BY', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        const SizedBox(width: 8),
+                        Text('FILTER BY', style: labelStyle),
+                        SizedBox(width: 8),
                         DropdownButton<String>(
                           value: _filter,
-                          items: _filters.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
+                          style: dropdownTextStyle,
+                          iconSize: dropdownIconSize,
+                          isDense: true,
+                          items: _filters.map((f) => DropdownMenuItem(value: f, child: Text(f, style: dropdownTextStyle))).toList(),
                           onChanged: (v) => setState(() => _filter = v ?? _filter),
                         ),
-                        const SizedBox(width: 24),
-                        const Text('SORT BY', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        const SizedBox(width: 8),
+                        SizedBox(width: smallGap),
+                        Text('SORT BY', style: labelStyle),
+                        SizedBox(width: 8),
                         DropdownButton<String>(
                           value: _sort,
-                          items: _sorts.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                          style: dropdownTextStyle,
+                          iconSize: dropdownIconSize,
+                          isDense: true,
+                          items: _sorts.map((s) => DropdownMenuItem(value: s, child: Text(s, style: dropdownTextStyle))).toList(),
                           onChanged: (v) => setState(() => _sort = v ?? _sort),
                         ),
                         const Spacer(),
-                        Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
+                        // show product count only on non-mobile
+                        isMobile ? const SizedBox.shrink() : Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),

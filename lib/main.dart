@@ -104,8 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ]),
       const Divider(height: 1),
       ExpansionTile(title: const Text('The Print Shack'), children: [
-        ListTile(title: const Text('Services'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ListTile(title: const Text('Pricing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('About'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Personalisation'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
       ]),
       const Divider(height: 1),
       ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
@@ -221,11 +221,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Background image
                       Positioned.fill(
                         child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                'https://shop.upsu.net/cdn/shop/files/Signature_T-Shirt_Indigo_Blue_2_2048x.jpg?v=1758290534',
-                              ),
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/tshirt.png'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -410,6 +408,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
+
+                // "View All Collections" CTA
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: isMobile ? 18.0 : 28.0),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1100),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => navigateToClothing(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4d2963),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: isMobile ? 14 : 18),
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                          ),
+                          child: Text(
+                            'VIEW ALL COLLECTIONS',
+                            style: TextStyle(
+                              fontSize: isMobile ? 14 : 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
 
                 // Footer
                 const CustomFooter(),

@@ -68,48 +68,34 @@ class _CustomFooterState extends State<CustomFooter> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top: three columns (or stacked on mobile)
-          isMobile
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Opening Hours
-                    _buildOpeningHours(),
-                    const SizedBox(height: 8),
-                    // Help and Info
-                    _buildHelpAndInfo(),
-                    const SizedBox(height: 8),
-                    // Newsletter
-                    _buildNewsletter(),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Opening Hours
-                    Expanded(flex: 3, child: _buildOpeningHours()),
-                    // Help and Info
-                    Expanded(flex: 2, child: _buildHelpAndInfo()),
-                    // Newsletter
-                    Expanded(flex: 3, child: _buildNewsletter()),
-                  ],
-                ),
-
-          const SizedBox(height: 14),
-          const Divider(height: 1),
-          const SizedBox(height: 12),
-
-          // Bottom row: social, copyright, payments
-          Row(
-            children: [
-              // social icons
-              Row(
+          // Top: desktop keeps three columns; mobile shows compact stacked footer (newsletter + social + payments)
+          if (!isMobile) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Opening Hours
+                Expanded(flex: 3, child: _buildOpeningHours()),
+                // Help and Info
+                Expanded(flex: 2, child: _buildHelpAndInfo()),
+                // Newsletter
+                Expanded(flex: 3, child: _buildNewsletter()),
+              ],
+            ),
+          ] else ...[
+            // Mobile: show only newsletter then social + payments + copyright (compact)
+            _buildNewsletterMobile(),
+            const SizedBox(height: 14),
+            // social icons centered
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.facebook),
                     onPressed: () {},
                     splashRadius: 20,
                   ),
+                  const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.travel_explore), // placeholder for twitter
                     onPressed: () {},
@@ -117,32 +103,87 @@ class _CustomFooterState extends State<CustomFooter> {
                   ),
                 ],
               ),
-
-              // spacer + copyright
-              const Expanded(
-                child: Center(
-                  child: Text(
-                    '© 2025, upsu-store  Powered by Shopify',
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
-                  ),
-                ),
-              ),
-
-              // payment badges
-              Row(
-                mainAxisSize: MainAxisSize.min,
+            ),
+            const SizedBox(height: 12),
+            // payment badges centered and wrapped
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   _paymentBadge('Apple Pay'),
                   _paymentBadge('Discover'),
-                  _paymentBadge('G Pay'),
-                  _paymentBadge('Mastercard'),
-                  _paymentBadge('Visa'),
+                  _payment_badge_small('G Pay'),
+                  _payment_badge_small('Mastercard'),
+                  _payment_badge_small('Visa'),
                 ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+            // copyright centered (mobile)
+            const Center(
+              child: Text(
+                '© 2025, upsu-store  Powered by Shopify',
+                style: TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 14),
+          const Divider(height: 1),
+          const SizedBox(height: 12),
         ],
       ),
+    );
+  }
+
+  // mobile-specific newsletter layout (stacked, full-width subscribe)
+  Widget _buildNewsletterMobile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildSectionTitle('Latest Offers'),
+        SizedBox(
+          height: 44,
+          child: TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              hintText: 'Email address',
+              border: OutlineInputBorder(borderRadius: BorderRadius.zero),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          height: 44,
+          child: ElevatedButton(
+            onPressed: _subscribe,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF4d2963),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+            child: const Text('SUBSCRIBE', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // helper: slightly more compact badge variant used on mobile
+  Widget _payment_badge_small(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey.shade300),
+        color: Colors.white,
+      ),
+      child: Text(label, style: const TextStyle(fontSize: 11)),
     );
   }
 
