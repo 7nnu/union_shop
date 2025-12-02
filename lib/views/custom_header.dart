@@ -28,7 +28,8 @@ class CustomHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerHeight = isMobile ? 120.0 : 175.0;
+    // shorter desktop header
+    final headerHeight = isMobile ? 120.0 : 130.0;
 
     return Container(
       height: headerHeight,
@@ -38,12 +39,17 @@ class CustomHeader extends StatelessWidget {
           // Top banner
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: isMobile ? 8 : 10, horizontal: isMobile ? 12 : 40),
+            padding: EdgeInsets.symmetric(vertical: isMobile ? 14 : 10, horizontal: isMobile ? 12 : 25),
             color: const Color(0xFF4d2963),
-            child: const Text(
+            child: Text(
               'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                // smaller font on mobile
+                fontSize: isMobile ? 13 : 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           // Main header

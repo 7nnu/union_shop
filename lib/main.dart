@@ -146,7 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
-    final headerHeight = isMobile ? 120.0 : 175.0;
+    // match CustomHeader's desktop height (shorter)
+    final headerHeight = isMobile ? 120.0 : 130.0;
     final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
 
     return Scaffold(
