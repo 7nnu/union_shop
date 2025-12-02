@@ -36,62 +36,72 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _mobileMenuOpen = false; // track mobile menu state
 
   // returns the list content used by both drawer and the slide-down menu
+  // NOTE: returns a Column with mainAxisSize.min so the slide-down menu will size to its content
   Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        // optional purple top row used for side-drawer; for slide-down we hide icons
-        if (showTopIcons)
-          Container(
-            color: const Color(0xFF4d2963),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                Image.network(
-                  'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                  height: 36,
-                  errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
-                ),
-                const Spacer(),
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.all(6),
-                  icon: const Icon(Icons.search, color: Colors.white),
-                  onPressed: placeholderCallbackForButtons,
-                ),
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.all(6),
-                  icon: const Icon(Icons.person_outline, color: Colors.white),
-                  onPressed: placeholderCallbackForButtons,
-                ),
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.all(6),
-                  icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
-                  onPressed: placeholderCallbackForButtons,
-                ),
-              ],
-            ),
+    final children = <Widget>[];
+
+    if (showTopIcons) {
+      children.add(
+        Container(
+          color: const Color(0xFF4d2963),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Image.network(
+                'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                height: 36,
+                errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
+              ),
+              const Spacer(),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.person_outline, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+            ],
           ),
-        ListTile(title: const Text('Home'), onTap: () { setActive('Home'); Navigator.pop(context); navigateToHome(context); }),
-        const Divider(height: 1),
-        ExpansionTile(title: const Text('Shop'), children: [
-          ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-          ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ]),
-        const Divider(height: 1),
-        ExpansionTile(title: const Text('The Print Shack'), children: [
-          ListTile(title: const Text('Services'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-          ListTile(title: const Text('Pricing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ]),
-        const Divider(height: 1),
-        ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
-        const Divider(height: 1),
-        ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); }),
-        const Divider(height: 1),
-        ListTile(title: const Text('UPSU.net'), onTap: () { setActive('UPSU.net'); Navigator.pop(context); }),
-      ],
+        ),
+      );
+    }
+
+    children.addAll([
+      ListTile(title: const Text('Home'), onTap: () { setActive('Home'); Navigator.pop(context); navigateToHome(context); }),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('Shop'), children: [
+        ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+      ]),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('The Print Shack'), children: [
+        ListTile(title: const Text('Services'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Pricing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+      ]),
+      const Divider(height: 1),
+      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
+      const Divider(height: 1),
+      ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); }),
+      const Divider(height: 1),
+      ListTile(title: const Text('UPSU.net'), onTap: () { setActive('UPSU.net'); Navigator.pop(context); }),
+    ]);
+
+    // Column with mainAxisSize.min so it only takes required height; wrap with SingleChildScrollView where scrolling is needed.
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
     );
   }
 
@@ -579,12 +589,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOut,
-                height: remainingHeight,
+                // allow the container to size to content up to remainingHeight
+                constraints: BoxConstraints(maxHeight: remainingHeight),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))],
                 ),
-                child: _drawerContent(context, showTopIcons: false),
+                child: SingleChildScrollView(
+                  // _drawerContent now returns a Column with mainAxisSize.min so the scroll view will only be as tall as needed
+                  child: _drawerContent(context, showTopIcons: false),
+                ),
               ),
             ),
         ],
