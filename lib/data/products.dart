@@ -202,6 +202,6 @@ const List<Product> sampleSaleProducts = [
 const List<Product> sampleAllProducts = [
   ...sampleWinterProducts,
   ...sampleMerchandiseProducts,
-  ...sampleEssentialProducst,
+  ...sampleEssentialProducts,
   ...sampleClothingProducts,
 ];
