@@ -11,6 +11,7 @@ class CustomHeader extends StatelessWidget {
   final bool mobileMenuOpen;
   final void Function(BuildContext) navigateToHome;
   final void Function(BuildContext) navigateToProduct;
+  final void Function(BuildContext) navigateToAbout;
 
   const CustomHeader({
     super.key,
@@ -24,6 +25,7 @@ class CustomHeader extends StatelessWidget {
     required this.mobileMenuOpen,
     required this.navigateToHome,
     required this.navigateToProduct,
+    required this.navigateToAbout,
   });
 
   @override
@@ -239,7 +241,7 @@ class CustomHeader extends StatelessWidget {
                                 child: SizedBox(
                                   height: 36,
                                   child: TextButton(
-                                    onPressed: () => onSetActive('About'),
+                                    onPressed: () => navigateToAbout(context),
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(horizontal: 8),
                                       minimumSize: const Size(0, 36),

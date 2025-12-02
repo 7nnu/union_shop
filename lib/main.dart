@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
+import 'package:union_shop/about_page.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
 
@@ -20,7 +21,10 @@ class UnionShopApp extends StatelessWidget {
       ),
       home: HomeScreen(),
       initialRoute: '/',
-      routes: {'/product': (context) => const ProductPage()},
+      routes: {
+        '/product': (context) => const ProductPage(),
+        '/about': (context) => const AboutPage(),
+      },
     );
   }
 }
@@ -94,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const Divider(height: 1),
       ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
       const Divider(height: 1),
-      ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); }),
+      ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); navigateToAbout(context); }),
       const Divider(height: 1),
       ListTile(title: const Text('UPSU.net'), onTap: () { setActive('UPSU.net'); Navigator.pop(context); }),
     ]);
@@ -127,6 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void navigateToProduct(BuildContext context) {
     setActive('Product');
     Navigator.pushNamed(context, '/product');
+  }
+
+  void navigateToAbout(BuildContext context) {
+    setActive('About');
+    Navigator.pushNamed(context, '/about');
   }
 
   void placeholderCallbackForButtons() {
@@ -170,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mobileMenuOpen: _mobileMenuOpen,
                   navigateToHome: navigateToHome,
                   navigateToProduct: navigateToProduct,
+                  navigateToAbout: navigateToAbout,
                 ),
 
                 // Hero Section
