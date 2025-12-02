@@ -52,7 +52,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
 
   List<Product> _computeList() {
     // use the essentials product list (note: products.dart uses sampleEssentialProducst)
-    List<Product> list = sampleEssentialProducst.toList();
+    List<Product> list = sampleEssentialProducts.toList();
 
     if (_filter == 'Sale') {
       list = sampleSaleProducts.toList();

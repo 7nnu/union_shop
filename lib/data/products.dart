@@ -118,7 +118,7 @@ const List<Product> sampleMerchandiseProducts = [
   ),
 ];
 
-const List<Product> sampleEssentialProducst = [
+const List<Product> sampleEssentialProducts = [
   Product(
     title: 'Essential Hoodie',
     original: '£25.00',
