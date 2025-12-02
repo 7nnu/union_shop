@@ -344,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   alignment: WrapAlignment.start,
                                   spacing: spacing,
                                   runSpacing: runSpacing,
-                                  children: sampleProducts
+                                  children: sampleEssentialsHome
                                       .map((prod) => SizedBox(width: itemWidth, child: ProductTile(product: prod)))
                                       .toList(),
                                 ),
@@ -356,6 +356,60 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+
+
+                Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(isMobile ? 16.0 : 40.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'MERCHANDISE COLLECTION!',
+                          style: TextStyle(
+                            fontSize: isMobile ? 18 : 25,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: isMobile ? 20 : 48),
+                        // Center the product area and constrain its maximum width so two columns
+                        // align like the provided screenshot. Item widths are computed from the
+                        // constrained content width to avoid odd gaps.
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final totalWidth = constraints.maxWidth;
+                            const maxContentWidth = 1100.0; // adjust to taste to match screenshot
+                            final contentWidth = totalWidth > maxContentWidth ? maxContentWidth : totalWidth;
+
+                            final spacing = isMobile ? 16.0 : 20.0;
+                            final runSpacing = isMobile ? 20.0 : 20.0;
+
+                            // For mobile use a single column, otherwise two columns.
+                            final columns = isMobile ? 1 : 2;
+                            final itemWidth = (contentWidth - (spacing * (columns - 1))) / columns;
+
+                            return Center(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  spacing: spacing,
+                                  runSpacing: runSpacing,
+                                  children: sampleMerchandiseHome
+                                      .map((prod) => SizedBox(width: itemWidth, child: ProductTile(product: prod)))
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
 
                 // Footer
                 const CustomFooter(),
