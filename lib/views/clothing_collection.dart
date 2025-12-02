@@ -71,6 +71,62 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
     return list;
   }
 
+  // minimal drawer content used for slide-down on mobile
+  Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
+    final children = <Widget>[];
+    if (showTopIcons) {
+      children.add(
+        Container(
+          color: const Color(0xFF4d2963),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Image.network(
+                'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                height: 36,
+                errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
+              ),
+              const Spacer(),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: () {
+                  final isMobileLocal = MediaQuery.of(context).size.width < 700;
+                  if (isMobileLocal) Navigator.pushNamed(context, '/search');
+                  else showSearch(context: context, delegate: ProductSearchDelegate());
+                },
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.person_outline, color: Colors.white),
+                onPressed: () => Navigator.pushNamed(context, '/login'),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    children.addAll([
+      ListTile(title: const Text('Home'), onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false)),
+      const Divider(height: 1),
+      ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/clothing'); }),
+      ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/merchandise'); }),
+      ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/essentials'); }),
+      ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/winter'); }),
+    ]);
+
+    return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
+  }
+
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
@@ -81,121 +137,147 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
     final dropdownIconSize = isMobile ? 18.0 : 24.0;
     final smallGap = isMobile ? 8.0 : 24.0;
 
-    // Render header, collection content and footer to match the HomeScreen layout
+    final headerHeight = isMobile ? 120.0 : 130.0;
+    final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
+
+    // Render header, collection content and footer with slide-down mobile menu
     return Scaffold(
       drawer: null,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomHeader(
-              isMobile: isMobile,
-              activeNav: activeNav,
-              hovering: _hovering,
-              onHover: _setHover,
-              onSetActive: _setActive,
-              placeholderCallback: _navigateToLogin,
-              toggleMobileMenu: _toggleMobileMenu,
-              mobileMenuOpen: _mobileMenuOpen,
-              navigateToHome: (_) => _navigateToHome(),
-              navigateToProduct: (_) => _navigateToProduct(),
-              navigateToAbout: (_) => _navigateToAbout(),
-              navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
-              navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
-              navigateToSearch: (ctx) {
-                final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                if (isMobileLocal) {
-                  Navigator.pushNamed(ctx, '/search');
-                } else {
-                  showSearch(context: ctx, delegate: ProductSearchDelegate());
-                }
-              },
-            ),
+      body: Stack(
+        children: [
+          // main content
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomHeader(
+                  isMobile: isMobile,
+                  activeNav: activeNav,
+                  hovering: _hovering,
+                  onHover: _setHover,
+                  onSetActive: _setActive,
+                  placeholderCallback: _navigateToLogin,
+                  toggleMobileMenu: _toggleMobileMenu,
+                  mobileMenuOpen: _mobileMenuOpen,
+                  navigateToHome: (_) => _navigateToHome(),
+                  navigateToProduct: (_) => _navigateToProduct(),
+                  navigateToAbout: (_) => _navigateToAbout(),
+                  navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
+                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
+                  navigateToSearch: (ctx) {
+                    final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
+                  },
+                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
+                  navigateToMerchandise: (BuildContext p1) {  },
+                ),
 
-            // page content
-            Padding(
-              padding: EdgeInsets.all(isMobile ? 12 : 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Heading
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    child: Text('Clothing', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
-                  ),
+                // page content
+                Padding(
+                  padding: EdgeInsets.all(isMobile ? 12 : 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Heading
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: Text('Clothing', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
+                      ),
 
-                  // Filter / Sort bar
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-                    ),
-                    child: Row(
-                      children: [
-                        // Filter
-                        Text('FILTER BY', style: labelStyle),
-                        SizedBox(width: 8),
-                        DropdownButton<String>(
-                          value: _filter,
-                          style: dropdownTextStyle,
-                          iconSize: dropdownIconSize,
-                          isDense: true,
-                          items: _filters.map((f) => DropdownMenuItem(value: f, child: Text(f, style: dropdownTextStyle))).toList(),
-                          onChanged: (v) => setState(() => _filter = v ?? _filter),
+                      // Filter / Sort bar
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
                         ),
-                        SizedBox(width: smallGap),
-                        // Sort
-                        Text('SORT BY', style: labelStyle),
-                        SizedBox(width: 8),
-                        DropdownButton<String>(
-                          value: _sort,
-                          style: dropdownTextStyle,
-                          iconSize: dropdownIconSize,
-                          isDense: true,
-                          items: _sorts.map((s) => DropdownMenuItem(value: s, child: Text(s, style: dropdownTextStyle))).toList(),
-                          onChanged: (v) => setState(() => _sort = v ?? _sort),
-                        ),
-                        const Spacer(),
-                        isMobile ? const SizedBox.shrink() : Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // Product grid (responsive)
-                  LayoutBuilder(builder: (context, constraints) {
-                    final totalWidth = constraints.maxWidth;
-                    const maxContentWidth = 1200.0;
-                    final contentWidth = totalWidth > maxContentWidth ? maxContentWidth : totalWidth;
-                    final spacing = isMobile ? 12.0 : 20.0;
-                    final runSpacing = isMobile ? 12.0 : 20.0;
-                    final columns = isMobile ? 1 : 3;
-                    final itemWidth = (contentWidth - (spacing * (columns - 1))) / columns;
-
-                    return Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: maxContentWidth),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          spacing: spacing,
-                          runSpacing: runSpacing,
-                          children: products
-                              .map((p) => SizedBox(
-                                    width: itemWidth,
-                                    child: ProductTile(product: p),
-                                  ))
-                              .toList(),
+                        child: Row(
+                          children: [
+                            // Filter
+                            Text('FILTER BY', style: labelStyle),
+                            SizedBox(width: 8),
+                            DropdownButton<String>(
+                              value: _filter,
+                              style: dropdownTextStyle,
+                              iconSize: dropdownIconSize,
+                              isDense: true,
+                              items: _filters.map((f) => DropdownMenuItem(value: f, child: Text(f, style: dropdownTextStyle))).toList(),
+                              onChanged: (v) => setState(() => _filter = v ?? _filter),
+                            ),
+                            SizedBox(width: smallGap),
+                            // Sort
+                            Text('SORT BY', style: labelStyle),
+                            SizedBox(width: 8),
+                            DropdownButton<String>(
+                              value: _sort,
+                              style: dropdownTextStyle,
+                              iconSize: dropdownIconSize,
+                              isDense: true,
+                              items: _sorts.map((s) => DropdownMenuItem(value: s, child: Text(s, style: dropdownTextStyle))).toList(),
+                              onChanged: (v) => setState(() => _sort = v ?? _sort),
+                            ),
+                            const Spacer(),
+                            isMobile ? const SizedBox.shrink() : Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
+                          ],
                         ),
                       ),
-                    );
-                  }),
-                ],
+
+                      const SizedBox(height: 18),
+
+                      // Product grid (responsive)
+                      LayoutBuilder(builder: (context, constraints) {
+                        final totalWidth = constraints.maxWidth;
+                        const maxContentWidth = 1200.0;
+                        final contentWidth = totalWidth > maxContentWidth ? maxContentWidth : totalWidth;
+                        final spacing = isMobile ? 12.0 : 20.0;
+                        final runSpacing = isMobile ? 12.0 : 20.0;
+                        final columns = isMobile ? 1 : 3;
+                        final itemWidth = (contentWidth - (spacing * (columns - 1))) / columns;
+
+                        return Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: maxContentWidth),
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              spacing: spacing,
+                              runSpacing: runSpacing,
+                              children: products
+                                  .map((p) => SizedBox(
+                                        width: itemWidth,
+                                        child: ProductTile(product: p),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+
+                const CustomFooter(),
+              ],
+            ),
+          ),
+
+          // slide-down mobile menu inserted under the navbar
+          if (_mobileMenuOpen)
+            Positioned(
+              top: headerHeight,
+              left: 0,
+              right: 0,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                constraints: BoxConstraints(maxHeight: remainingHeight),
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))]),
+                child: SingleChildScrollView(child: _drawerContent(context, showTopIcons: false)),
               ),
             ),
-
-            const CustomFooter(),
-          ],
-        ),
+        ],
       ),
     );
   }

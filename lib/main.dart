@@ -10,6 +10,9 @@ import 'package:union_shop/views/login_page.dart';
 import 'package:union_shop/views/clothing_collection.dart';
 import 'package:union_shop/views/essentials_collection.dart';
 import 'package:union_shop/views/search_page.dart';
+import 'package:union_shop/views/winter_collection.dart';
+import 'package:union_shop/views/merchandise_collection.dart';
+import 'package:union_shop/views/all_collection.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -34,6 +37,9 @@ class UnionShopApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/clothing': (context) => const ClothingCollectionPage(),
         '/essentials': (context) => const EssentialsCollectionPage(),
+        '/merchandise': (context) => const MerchandiseCollectionPage(),
+        '/winter': (context) => const WinterCollectionPage(),
+        '/all': (context) => const AllCollectionPage(),
         '/search': (context) => const SearchPage(),
       },
     );
@@ -74,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 visualDensity: VisualDensity.compact,
                 padding: const EdgeInsets.all(6),
                 icon: const Icon(Icons.search, color: Colors.white),
-                onPressed: placeholderCallbackForButtons,
+                onPressed: () => navigateToSearch(context),
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
@@ -99,10 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
       const Divider(height: 1),
       ExpansionTile(title: const Text('Shop'), children: [
         ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); navigateToClothing(context); }),
-        ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ListTile(title: const Text('All'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); navigateToMerchandise(context); }),
+        ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); navigateToEssentials(context); }),
+        ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); navigateToWinter(context); }),
+        ListTile(title: const Text('All'), onTap: () { Navigator.pop(context); navigateToAll(context); }),
       ]),
       const Divider(height: 1),
       ExpansionTile(title: const Text('The Print Shack'), children: [
@@ -181,6 +187,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void navigateToWinter(BuildContext context) {
+    setActive('Winter');
+    Navigator.pushNamed(context, '/winter');
+  }
+
+  void navigateToMerchandise(BuildContext context) {
+    setActive('Merchandise');
+    Navigator.pushNamed(context, '/merchandise');
+  }
+
+  void navigateToAll(BuildContext context) {
+    setActive('All');
+    Navigator.pushNamed(context, '/all');
+  }
+
   Widget _buildDrawer(BuildContext context) {
     // keep for compatibility (side-drawer) but not used when mobile uses slide-down
     return Drawer(child: SafeArea(child: _drawerContent(context)));
@@ -221,7 +242,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToAbout: navigateToAbout,
                   navigateToClothing: navigateToClothing,
                   navigateToEssentials: navigateToEssentials,
+                  navigateToMerchandise: navigateToMerchandise,
                   navigateToSearch: navigateToSearch,
+                  navigateToWinter: navigateToWinter,
+                  navigateToAll: navigateToAll,
                 ),
 
                 // Hero Section

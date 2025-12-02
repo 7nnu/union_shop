@@ -14,7 +14,10 @@ class CustomHeader extends StatelessWidget {
   final void Function(BuildContext) navigateToAbout;
   final void Function(BuildContext) navigateToClothing;
   final void Function(BuildContext) navigateToEssentials;
+  final void Function(BuildContext) navigateToMerchandise;
   final void Function(BuildContext) navigateToSearch;
+  final void Function(BuildContext) navigateToWinter;
+  final void Function(BuildContext) navigateToAll;
 
   const CustomHeader({
     super.key,
@@ -31,7 +34,10 @@ class CustomHeader extends StatelessWidget {
     required this.navigateToAbout,
     required this.navigateToClothing,
     required this.navigateToEssentials,
+    required this.navigateToMerchandise,
     required this.navigateToSearch,
+    required this.navigateToWinter,
+    required this.navigateToAll,
   });
 
   @override
@@ -95,14 +101,8 @@ class CustomHeader extends StatelessWidget {
                         // show menu or X depending on open state, slide-down from beneath header
                         IconButton(
                           icon: Icon(mobileMenuOpen ? Icons.close : Icons.menu, color: Colors.black),
-                          onPressed: () {
-                            final scaffoldWidget = context.findAncestorWidgetOfExactType<Scaffold>();
-                            if (scaffoldWidget != null && scaffoldWidget.drawer != null) {
-                              Scaffold.of(context).openDrawer();
-                            } else {
-                              toggleMobileMenu();
-                            }
-                          },
+                          // always toggle the in-tree slide-down menu (do not open the Scaffold drawer)
+                          onPressed: toggleMobileMenu,
                         ),
                       ],
                     );
@@ -161,8 +161,14 @@ class CustomHeader extends StatelessWidget {
                                       onSetActive('Shop');
                                       if (v == 'clothing') {
                                         navigateToClothing(context);
+                                      } else if (v == 'merchandise') {
+                                        navigateToMerchandise(context);
                                       } else if (v == 'essentials') {
                                         navigateToEssentials(context);
+                                      } else if (v == 'winter') {
+                                        navigateToWinter(context);
+                                      } else if (v == 'all') {
+                                        navigateToAll(context);
                                       } else {
                                         placeholderCallback();
                                       }

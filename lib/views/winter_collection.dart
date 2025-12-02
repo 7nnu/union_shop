@@ -6,19 +6,19 @@ import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
 import 'package:union_shop/views/search_page.dart';
 
-class EssentialsCollectionPage extends StatefulWidget {
-  const EssentialsCollectionPage({super.key});
+class WinterCollectionPage extends StatefulWidget {
+  const WinterCollectionPage({super.key});
 
   @override
-  State<EssentialsCollectionPage> createState() => _EssentialsCollectionPageState();
+  State<WinterCollectionPage> createState() => _WinterCollectionPageState();
 }
 
-class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
+class _WinterCollectionPageState extends State<WinterCollectionPage> {
   String _filter = 'All products';
   String _sort = 'Featured';
 
   // header state
-  String activeNav = 'Essentials';
+  String activeNav = 'Winter';
   final Map<String, bool> _hovering = {};
   bool _mobileMenuOpen = false;
 
@@ -33,8 +33,9 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
 
   final List<String> _filters = [
     'All products',
-    'Hoodies',
-    'T-Shirts',
+    'Scarves',
+    'Beanies',
+    'Gloves',
     'Jackets',
     'Sale',
   ];
@@ -51,15 +52,16 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
   }
 
   List<Product> _computeList() {
-    // use the essentials product list (note: products.dart uses sampleEssentialProducst)
-    List<Product> list = sampleEssentialProducts.toList();
+    List<Product> list = sampleWinterProducts.toList();
 
     if (_filter == 'Sale') {
       list = sampleSaleProducts.toList();
-    } else if (_filter == 'Hoodies') {
-      list = list.where((p) => p.title.toLowerCase().contains('hoodie')).toList();
-    } else if (_filter == 'T-Shirts') {
-      list = list.where((p) => p.title.toLowerCase().contains('t-shirt') || p.title.toLowerCase().contains('tshirt')).toList();
+    } else if (_filter == 'Scarves') {
+      list = list.where((p) => p.title.toLowerCase().contains('scarf')).toList();
+    } else if (_filter == 'Beanies') {
+      list = list.where((p) => p.title.toLowerCase().contains('beanie')).toList();
+    } else if (_filter == 'Gloves') {
+      list = list.where((p) => p.title.toLowerCase().contains('glove')).toList();
     } else if (_filter == 'Jackets') {
       list = list.where((p) => p.title.toLowerCase().contains('jacket')).toList();
     }
@@ -72,7 +74,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
     return list;
   }
 
-  // minimal drawer so hamburger opens on mobile (keeps parity with Home)
+  // minimal drawer so hamburger opens on mobile
   Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -96,7 +98,8 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
         const Divider(height: 1),
         ExpansionTile(title: const Text('Shop'), children: [
           ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/clothing'); }),
-          ListTile(title: const Text('Accessories'), onTap: () => Navigator.pop(context)),
+          ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/essentials'); }),
+          ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/winter'); }),
         ]),
         const Divider(height: 1),
         ListTile(title: const Text('About'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/about'); }),
@@ -110,13 +113,14 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
     final products = _computeList();
-    // compact styles for mobile filter/sort bar
+    final headerHeight = isMobile ? 120.0 : 130.0;
+    final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
+
+    // compact styles for mobile filter/sort bar (match clothing/essentials)
     final labelStyle = TextStyle(fontSize: isMobile ? 10 : 12, color: Colors.grey);
     final dropdownTextStyle = TextStyle(fontSize: isMobile ? 12 : 14, color: Colors.black);
     final dropdownIconSize = isMobile ? 18.0 : 24.0;
     final smallGap = isMobile ? 8.0 : 24.0;
-    final headerHeight = isMobile ? 120.0 : 130.0;
-    final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
 
     return Scaffold(
       drawer: null,
@@ -138,6 +142,9 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                   navigateToProduct: (_) => _navigateToProduct(),
                   navigateToAbout: (_) => _navigateToAbout(),
                   navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
+                  navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
+                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
@@ -147,7 +154,6 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
                   },
-                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'), navigateToMerchandise: (BuildContext p1) {  }, navigateToWinter: (BuildContext p1) {  },
                 ),
 
                 Padding(
@@ -158,7 +164,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                       // Heading
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 18),
-                        child: Text('Essentials', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
+                        child: Text('Winter Collection', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
                       ),
 
                       // Filter / Sort bar
@@ -192,7 +198,6 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                               onChanged: (v) => setState(() => _sort = v ?? _sort),
                             ),
                             const Spacer(),
-                            // show product count only on non-mobile
                             isMobile ? const SizedBox.shrink() : Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
                           ],
                         ),
