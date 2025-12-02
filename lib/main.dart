@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             ListTile(
-              title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              title: const Text('SALE!', style: TextStyle(color: Colors.black)),
               onTap: () {
                 setActive('SALE!');
                 Navigator.pop(context);
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, constraints) {
                           final headerIsMobile = constraints.maxWidth < 700;
                           if (headerIsMobile) {
-                            // Mobile header: logo + hamburger
+                            // Mobile header: logo + icons + hamburger
                             return Row(
                               children: [
                                 GestureDetector(
@@ -189,6 +189,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 const Spacer(),
+                                IconButton(
+                                  icon: const Icon(Icons.search, size: 20, color: Colors.black),
+                                  onPressed: placeholderCallbackForButtons,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.person_outline, size: 20, color: Colors.black),
+                                  onPressed: placeholderCallbackForButtons,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.shopping_bag_outlined, size: 20, color: Colors.black),
+                                  onPressed: placeholderCallbackForButtons,
+                                ),
                                 Builder(
                                   builder: (scaffoldCtx) => IconButton(
                                     icon: const Icon(Icons.menu, color: Colors.black),
@@ -204,17 +216,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () => navigateToHome(context),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.network(
-                                      'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                                      height: 35,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Text('Union Shop', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
-                                  ],
+                                // show only the logo image on desktop (no "Union Shop" text)
+                                child: Image.network(
+                                  'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                                  height: 35,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
 
@@ -337,8 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(
                                               'SALE!',
                                               style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
                                                 decoration: (activeNav == 'SALE!' || (_hovering['SALE!'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                               ),
                                             ),
