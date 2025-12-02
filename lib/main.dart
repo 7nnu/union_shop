@@ -97,8 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
       const Divider(height: 1),
       ExpansionTile(title: const Text('Shop'), children: [
         ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); navigateToClothing(context); }),
-        ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        
+        ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('All'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
       ]),
       const Divider(height: 1),
       ExpansionTile(title: const Text('The Print Shack'), children: [
@@ -277,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     SizedBox(height: isMobile ? 20 : 32),
                                     ElevatedButton(
-                                      onPressed: placeholderCallbackForButtons,
+                                      onPressed: () => navigateToEssentials(context),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFF4d2963),
                                         foregroundColor: Colors.white,

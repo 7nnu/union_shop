@@ -27,6 +27,37 @@ const List<Product> sampleProducts = [
   ),
 ];
 
+const List<Product> sampleEssentialsHome = [
+    Product(
+    title: 'Essential Hoodie',
+    original: '£25.00',
+    price: '£18.00',
+    imageUrl: 'assets/images/hoodie.png',
+  ),
+
+  Product(
+    title: 'Essential Jacket',
+    original: '£50.00',
+    price: '£35.00',
+    imageUrl: 'assets/images/jacket.png',
+  ),
+];
+
+const List<Product> sampleMerchandiseHome = [
+    Product(
+    title: 'University Tote Bag',
+    original: '£8.00',
+    price: '£5.00',
+    imageUrl: 'assets/images/tote_bag.png',
+  ),
+  Product(
+    title: 'University Mug',
+    original: '£10.00',
+    price: '£7.00',
+    imageUrl: 'assets/images/mug.png',
+  ),
+];
+
 const List<Product> sampleWinterProducts = [
   Product(
     title: 'Winter Scarf',
@@ -130,6 +161,7 @@ const List<Product> sampleClothingProducts = [
     price: '£35.00',
     imageUrl: 'assets/images/jacket.png',
   ),
+  
 ];
 
 const List<Product> sampleSaleProducts = [
@@ -145,31 +177,23 @@ const List<Product> sampleSaleProducts = [
     price: '£9.00',
     imageUrl: 'assets/images/navy_beanie.png',
   ),
+    Product(
+    title: 'University Tote Bag',
+    original: '£8.00',
+    price: '£5.00',
+    imageUrl: 'assets/images/tote_bag.png',
+  ),
+  Product(
+    title: 'University Mug',
+    original: '£10.00',
+    price: '£7.00',
+    imageUrl: 'assets/images/mug.png',
+  ),
 ];
 
 const List<Product> sampleAllProducts = [
-    Product(
-    title: 'Beanie — Pink (Pom)',
-    original: '£12.00',
-    price: '£9.00',
-    imageUrl: 'assets/images/pink_beanie.png',
-  ),
-  Product(
-    title: 'Beanie — Navy',
-    original: '£12.00',
-    price: '£9.00',
-    imageUrl: 'assets/images/navy_beanie.png',
-  ),
-  Product(
-    title: 'Beanie — Black',
-    original: '£12.00',
-    price: '£9.00',
-    imageUrl: 'assets/images/black_beanie.png',
-  ),
-  Product(
-    title: 'Beanie — White',
-    original: '£12.00',
-    price: '£9.00',
-    imageUrl: 'assets/images/white_beanie.png',
-  ),
+  ...sampleWinterProducts,
+  ...sampleMerchandiseProducts,
+  ...sampleEssentialProducst,
+  ...sampleClothingProducts,
 ];
