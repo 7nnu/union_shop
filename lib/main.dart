@@ -7,6 +7,7 @@ import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/views/product_tile.dart';
 import 'package:union_shop/views/login_page.dart';
+import 'package:union_shop/views/clothing_collection.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -29,6 +30,7 @@ class UnionShopApp extends StatelessWidget {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
         '/login': (context) => const LoginPage(),
+        '/clothing': (context) => const ClothingCollectionPage(),
       },
     );
   }
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(title: const Text('Home'), onTap: () { setActive('Home'); Navigator.pop(context); navigateToHome(context); }),
       const Divider(height: 1),
       ExpansionTile(title: const Text('Shop'), children: [
-        ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); navigateToClothing(context); }),
         ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
         
       ]),
@@ -102,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ListTile(title: const Text('Pricing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
       ]),
       const Divider(height: 1),
-      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
+      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
       const Divider(height: 1),
       ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); navigateToAbout(context); }),
       const Divider(height: 1),
@@ -154,6 +156,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, '/login');
   }
 
+  void navigateToClothing(BuildContext context) {
+    setActive('Clothing');
+    Navigator.pushNamed(context, '/clothing');
+  }
+
   Widget _buildDrawer(BuildContext context) {
     // keep for compatibility (side-drawer) but not used when mobile uses slide-down
     return Drawer(child: SafeArea(child: _drawerContent(context)));
@@ -172,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
 
     return Scaffold(
-      drawer: null,
+      drawer: _buildDrawer(context),
       body: Stack(
         children: [
           // main page content
@@ -192,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToHome: navigateToHome,
                   navigateToProduct: navigateToProduct,
                   navigateToAbout: navigateToAbout,
+                  navigateToClothing: navigateToClothing,
                 ),
 
                 // Hero Section

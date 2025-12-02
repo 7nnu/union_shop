@@ -12,6 +12,7 @@ class CustomHeader extends StatelessWidget {
   final void Function(BuildContext) navigateToHome;
   final void Function(BuildContext) navigateToProduct;
   final void Function(BuildContext) navigateToAbout;
+  final void Function(BuildContext) navigateToClothing;
 
   const CustomHeader({
     super.key,
@@ -26,6 +27,7 @@ class CustomHeader extends StatelessWidget {
     required this.navigateToHome,
     required this.navigateToProduct,
     required this.navigateToAbout,
+    required this.navigateToClothing,
   });
 
   @override
@@ -146,7 +148,11 @@ class CustomHeader extends StatelessWidget {
                                   child: PopupMenuButton<String>(
                                     onSelected: (v) {
                                       onSetActive('Shop');
-                                      placeholderCallback();
+                                      if (v == 'clothing') {
+                                        navigateToClothing(context);
+                                      } else {
+                                        placeholderCallback();
+                                      }
                                     },
                                     itemBuilder: (_) => const [
                                       PopupMenuItem(value: 'clothing', child: Text('Clothing')),

@@ -1,0 +1,180 @@
+import 'package:flutter/material.dart';
+import 'package:union_shop/models/product.dart';
+import 'package:union_shop/data/products.dart';
+import 'package:union_shop/views/product_tile.dart';
+import 'package:union_shop/views/custom_header.dart';
+import 'package:union_shop/views/custom_footer.dart';
+
+class ClothingCollectionPage extends StatefulWidget {
+  const ClothingCollectionPage({super.key});
+
+  @override
+  State<ClothingCollectionPage> createState() => _ClothingCollectionPageState();
+}
+
+class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
+  String _filter = 'All products';
+  String _sort = 'Featured';
+
+  // header state
+  String activeNav = 'Clothing';
+  final Map<String, bool> _hovering = {};
+  bool _mobileMenuOpen = false;
+
+  void _setHover(String name, bool val) => setState(() => _hovering[name] = val);
+  void _setActive(String name) => setState(() => activeNav = name);
+  void _toggleMobileMenu() => setState(() => _mobileMenuOpen = !_mobileMenuOpen);
+
+  void _navigateToHome() => Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+  void _navigateToProduct() => Navigator.pushNamed(context, '/product');
+  void _navigateToAbout() => Navigator.pushNamed(context, '/about');
+  void _navigateToLogin() => Navigator.pushNamed(context, '/login');
+
+  final List<String> _filters = [
+    'All products',
+    'Hoodies',
+    'T-Shirts',
+    'Jackets',
+    'Sale',
+  ];
+
+  final List<String> _sorts = [
+    'Featured',
+    'Price: Low to High',
+    'Price: High to Low',
+  ];
+
+  double _priceValue(Product p) {
+    final s = p.price.replaceAll(RegExp(r'[^\d.]'), '');
+    return double.tryParse(s) ?? double.maxFinite;
+  }
+
+  List<Product> _computeList() {
+    List<Product> list = sampleClothingProducts.toList();
+
+    if (_filter == 'Sale') {
+      list = sampleClothingProducts.toList();
+    } else if (_filter == 'Hoodies') {
+      list = list.where((p) => p.title.toLowerCase().contains('hoodie')).toList();
+    } else if (_filter == 'T-Shirts') {
+      list = list.where((p) => p.title.toLowerCase().contains('t-shirt') || p.title.toLowerCase().contains('tshirt')).toList();
+    } else if (_filter == 'Jackets') {
+      list = list.where((p) => p.title.toLowerCase().contains('jacket')).toList();
+    } // 'All products' keeps the full clothing list
+
+    if (_sort == 'Price: Low to High') {
+      list.sort((a, b) => _priceValue(a).compareTo(_priceValue(b)));
+    } else if (_sort == 'Price: High to Low') {
+      list.sort((a, b) => _priceValue(b).compareTo(_priceValue(a)));
+    }
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+    final products = _computeList();
+
+    // Render header, collection content and footer to match the HomeScreen layout
+    return Scaffold(
+      drawer: null,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomHeader(
+              isMobile: isMobile,
+              activeNav: activeNav,
+              hovering: _hovering,
+              onHover: _setHover,
+              onSetActive: _setActive,
+              placeholderCallback: _navigateToLogin,
+              toggleMobileMenu: _toggleMobileMenu,
+              mobileMenuOpen: _mobileMenuOpen,
+              navigateToHome: (_) => _navigateToHome(),
+              navigateToProduct: (_) => _navigateToProduct(),
+              navigateToAbout: (_) => _navigateToAbout(),
+              navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+            ),
+
+            // page content
+            Padding(
+              padding: EdgeInsets.all(isMobile ? 12 : 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Heading
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    child: Text('Clothing', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
+                  ),
+
+                  // Filter / Sort bar
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                    ),
+                    child: Row(
+                      children: [
+                        // Filter
+                        const Text('FILTER BY', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        const SizedBox(width: 8),
+                        DropdownButton<String>(
+                          value: _filter,
+                          items: _filters.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
+                          onChanged: (v) => setState(() => _filter = v ?? _filter),
+                        ),
+                        const SizedBox(width: 24),
+                        const Text('SORT BY', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        const SizedBox(width: 8),
+                        DropdownButton<String>(
+                          value: _sort,
+                          items: _sorts.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                          onChanged: (v) => setState(() => _sort = v ?? _sort),
+                        ),
+                        const Spacer(),
+                        Text('${products.length} products', style: const TextStyle(color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  // Product grid (responsive)
+                  LayoutBuilder(builder: (context, constraints) {
+                    final totalWidth = constraints.maxWidth;
+                    const maxContentWidth = 1200.0;
+                    final contentWidth = totalWidth > maxContentWidth ? maxContentWidth : totalWidth;
+                    final spacing = isMobile ? 12.0 : 20.0;
+                    final runSpacing = isMobile ? 12.0 : 20.0;
+                    final columns = isMobile ? 1 : 3;
+                    final itemWidth = (contentWidth - (spacing * (columns - 1))) / columns;
+
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: maxContentWidth),
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: spacing,
+                          runSpacing: runSpacing,
+                          children: products
+                              .map((p) => SizedBox(
+                                    width: itemWidth,
+                                    child: ProductTile(product: p),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+
+            const CustomFooter(),
+          ],
+        ),
+      ),
+    );
+  }
+}
