@@ -8,6 +8,7 @@ import 'package:union_shop/data/products.dart';
 import 'package:union_shop/views/product_tile.dart';
 import 'package:union_shop/views/login_page.dart';
 import 'package:union_shop/views/clothing_collection.dart';
+import 'package:union_shop/views/essentials_collection.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -31,6 +32,7 @@ class UnionShopApp extends StatelessWidget {
         '/about': (context) => const AboutPage(),
         '/login': (context) => const LoginPage(),
         '/clothing': (context) => const ClothingCollectionPage(),
+        '/essentials': (context) => const EssentialsCollectionPage(),
       },
     );
   }
@@ -161,6 +163,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, '/clothing');
   }
 
+  void navigateToEssentials(BuildContext context) {
+    setActive('Essentials');
+    Navigator.pushNamed(context, '/essentials');
+  }
+
   Widget _buildDrawer(BuildContext context) {
     // keep for compatibility (side-drawer) but not used when mobile uses slide-down
     return Drawer(child: SafeArea(child: _drawerContent(context)));
@@ -200,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToProduct: navigateToProduct,
                   navigateToAbout: navigateToAbout,
                   navigateToClothing: navigateToClothing,
+                  navigateToEssentials: navigateToEssentials,
                 ),
 
                 // Hero Section

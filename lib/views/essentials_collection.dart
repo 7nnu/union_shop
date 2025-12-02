@@ -5,19 +5,19 @@ import 'package:union_shop/views/product_tile.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
 
-class ClothingCollectionPage extends StatefulWidget {
-  const ClothingCollectionPage({super.key});
+class EssentialsCollectionPage extends StatefulWidget {
+  const EssentialsCollectionPage({super.key});
 
   @override
-  State<ClothingCollectionPage> createState() => _ClothingCollectionPageState();
+  State<EssentialsCollectionPage> createState() => _EssentialsCollectionPageState();
 }
 
-class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
+class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
   String _filter = 'All products';
   String _sort = 'Featured';
 
   // header state
-  String activeNav = 'Clothing';
+  String activeNav = 'Essentials';
   final Map<String, bool> _hovering = {};
   bool _mobileMenuOpen = false;
 
@@ -50,17 +50,18 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
   }
 
   List<Product> _computeList() {
-    List<Product> list = sampleClothingProducts.toList();
+    // use the essentials product list (note: products.dart uses sampleEssentialProducst)
+    List<Product> list = sampleEssentialProducst.toList();
 
     if (_filter == 'Sale') {
-      list = sampleClothingProducts.toList();
+      list = sampleSaleProducts.toList();
     } else if (_filter == 'Hoodies') {
       list = list.where((p) => p.title.toLowerCase().contains('hoodie')).toList();
     } else if (_filter == 'T-Shirts') {
       list = list.where((p) => p.title.toLowerCase().contains('t-shirt') || p.title.toLowerCase().contains('tshirt')).toList();
     } else if (_filter == 'Jackets') {
       list = list.where((p) => p.title.toLowerCase().contains('jacket')).toList();
-    } // 'All products' keeps the full clothing list
+    }
 
     if (_sort == 'Price: Low to High') {
       list.sort((a, b) => _priceValue(a).compareTo(_priceValue(b)));
@@ -70,14 +71,46 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
     return list;
   }
 
+  // minimal drawer so hamburger opens on mobile (keeps parity with Home)
+  Widget _drawerContent(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          color: const Color(0xFF4d2963),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Image.network(
+                'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                height: 36,
+                errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
+              ),
+            ],
+          ),
+        ),
+        ListTile(title: const Text('Home'), onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false)),
+        const Divider(height: 1),
+        ExpansionTile(title: const Text('Shop'), children: [
+          ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/clothing'); }),
+          ListTile(title: const Text('Accessories'), onTap: () => Navigator.pop(context)),
+        ]),
+        const Divider(height: 1),
+        ListTile(title: const Text('About'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/about'); }),
+      ],
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) => Drawer(child: SafeArea(child: SingleChildScrollView(child: _drawerContent(context))));
+
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
     final products = _computeList();
 
-    // Render header, collection content and footer to match the HomeScreen layout
     return Scaffold(
-      drawer: null,
+      drawer: _buildDrawer(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -97,7 +130,6 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
               navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
             ),
 
-            // page content
             Padding(
               padding: EdgeInsets.all(isMobile ? 12 : 28),
               child: Column(
@@ -106,7 +138,7 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
                   // Heading
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18),
-                    child: Text('Clothing', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
+                    child: Text('Essentials', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 34, fontWeight: FontWeight.bold)),
                   ),
 
                   // Filter / Sort bar

@@ -13,6 +13,7 @@ class CustomHeader extends StatelessWidget {
   final void Function(BuildContext) navigateToProduct;
   final void Function(BuildContext) navigateToAbout;
   final void Function(BuildContext) navigateToClothing;
+  final void Function(BuildContext) navigateToEssentials;
 
   const CustomHeader({
     super.key,
@@ -28,6 +29,7 @@ class CustomHeader extends StatelessWidget {
     required this.navigateToProduct,
     required this.navigateToAbout,
     required this.navigateToClothing,
+    required this.navigateToEssentials,
   });
 
   @override
@@ -150,6 +152,8 @@ class CustomHeader extends StatelessWidget {
                                       onSetActive('Shop');
                                       if (v == 'clothing') {
                                         navigateToClothing(context);
+                                      } else if (v == 'essentials') {
+                                        navigateToEssentials(context);
                                       } else {
                                         placeholderCallback();
                                       }
