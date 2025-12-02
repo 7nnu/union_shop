@@ -9,6 +9,7 @@ import 'package:union_shop/views/product_tile.dart';
 import 'package:union_shop/views/login_page.dart';
 import 'package:union_shop/views/clothing_collection.dart';
 import 'package:union_shop/views/essentials_collection.dart';
+import 'package:union_shop/views/search_page.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -33,6 +34,7 @@ class UnionShopApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/clothing': (context) => const ClothingCollectionPage(),
         '/essentials': (context) => const EssentialsCollectionPage(),
+        '/search': (context) => const SearchPage(),
       },
     );
   }
@@ -170,6 +172,15 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, '/essentials');
   }
 
+  void navigateToSearch(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+    if (isMobile) {
+      Navigator.pushNamed(context, '/search');
+    } else {
+      showSearch(context: context, delegate: ProductSearchDelegate());
+    }
+  }
+
   Widget _buildDrawer(BuildContext context) {
     // keep for compatibility (side-drawer) but not used when mobile uses slide-down
     return Drawer(child: SafeArea(child: _drawerContent(context)));
@@ -210,6 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToAbout: navigateToAbout,
                   navigateToClothing: navigateToClothing,
                   navigateToEssentials: navigateToEssentials,
+                  navigateToSearch: navigateToSearch,
                 ),
 
                 // Hero Section

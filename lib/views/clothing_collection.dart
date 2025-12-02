@@ -4,6 +4,7 @@ import 'package:union_shop/data/products.dart';
 import 'package:union_shop/views/product_tile.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
+import 'package:union_shop/views/search_page.dart';
 
 class ClothingCollectionPage extends StatefulWidget {
   const ClothingCollectionPage({super.key});
@@ -97,7 +98,17 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
               mobileMenuOpen: _mobileMenuOpen,
               navigateToHome: (_) => _navigateToHome(),
               navigateToProduct: (_) => _navigateToProduct(),
-              navigateToAbout: (_) => _navigateToAbout(), navigateToClothing: (BuildContext p1) {  }, navigateToEssentials: (BuildContext p1) {  },
+              navigateToAbout: (_) => _navigateToAbout(),
+              navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+              navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
+              navigateToSearch: (ctx) {
+                final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
+                if (isMobileLocal) {
+                  Navigator.pushNamed(ctx, '/search');
+                } else {
+                  showSearch(context: ctx, delegate: ProductSearchDelegate());
+                }
+              },
             ),
 
             // page content

@@ -14,6 +14,7 @@ class CustomHeader extends StatelessWidget {
   final void Function(BuildContext) navigateToAbout;
   final void Function(BuildContext) navigateToClothing;
   final void Function(BuildContext) navigateToEssentials;
+  final void Function(BuildContext) navigateToSearch;
 
   const CustomHeader({
     super.key,
@@ -30,6 +31,7 @@ class CustomHeader extends StatelessWidget {
     required this.navigateToAbout,
     required this.navigateToClothing,
     required this.navigateToEssentials,
+    required this.navigateToSearch,
   });
 
   @override
@@ -80,7 +82,7 @@ class CustomHeader extends StatelessWidget {
                         const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.search, size: 20, color: Colors.black),
-                          onPressed: placeholderCallback,
+                          onPressed: () => navigateToSearch(context),
                         ),
                         IconButton(
                           icon: const Icon(Icons.person_outline, size: 20, color: Colors.black),
@@ -93,7 +95,14 @@ class CustomHeader extends StatelessWidget {
                         // show menu or X depending on open state, slide-down from beneath header
                         IconButton(
                           icon: Icon(mobileMenuOpen ? Icons.close : Icons.menu, color: Colors.black),
-                          onPressed: toggleMobileMenu,
+                          onPressed: () {
+                            final scaffoldWidget = context.findAncestorWidgetOfExactType<Scaffold>();
+                            if (scaffoldWidget != null && scaffoldWidget.drawer != null) {
+                              Scaffold.of(context).openDrawer();
+                            } else {
+                              toggleMobileMenu();
+                            }
+                          },
                         ),
                       ],
                     );
@@ -298,7 +307,7 @@ class CustomHeader extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.search, size: 24, color: Colors.black),
-                            onPressed: placeholderCallback,
+                            onPressed: () => navigateToSearch(context),
                           ),
                           IconButton(
                             icon: const Icon(Icons.person_outline, size: 24, color: Colors.black),

@@ -126,7 +126,7 @@ class _AboutPageState extends State<AboutPage> {
                   mobileMenuOpen: _mobileMenuOpen,
                   navigateToHome: navigateToHome,
                   navigateToProduct: navigateToProduct,
-                  navigateToAbout: navigateToAbout, navigateToClothing: (BuildContext p1) {  }, navigateToEssentials: (BuildContext p1) {  },
+                  navigateToAbout: navigateToAbout, navigateToClothing: (BuildContext p1) {  }, navigateToEssentials: (BuildContext p1) {  }, navigateToSearch: (BuildContext p1) {  },
                 ),
 
                 // Centered, larger About content
