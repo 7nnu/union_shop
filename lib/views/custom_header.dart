@@ -151,6 +151,7 @@ class CustomHeader extends StatelessWidget {
                                     itemBuilder: (_) => const [
                                       PopupMenuItem(value: 'clothing', child: Text('Clothing')),
                                       PopupMenuItem(value: 'merchandise', child: Text('Merchandise')),
+                                      PopupMenuItem(value: 'essentials', child:Text('Essentials')),
                                       PopupMenuItem(value: 'winter', child: Text('Winter')),
                                     ],
                                     child: Padding(

@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ExpansionTile(title: const Text('Shop'), children: [
         ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
         ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        
       ]),
       const Divider(height: 1),
       ExpansionTile(title: const Text('The Print Shack'), children: [
