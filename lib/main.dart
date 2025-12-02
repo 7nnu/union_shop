@@ -17,10 +17,7 @@ class UnionShopApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
       ),
       home: HomeScreen(),
-      // By default, the app starts at the '/' route, which is the HomeScreen
       initialRoute: '/',
-      // When navigating to '/product', build and return the ProductPage
-      // In your browser, try this link: http://localhost:49856/#/product
       routes: {'/product': (context) => const ProductPage()},
     );
   }
@@ -34,8 +31,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String activeNav = 'Home'; // track which nav is active
-  final Map<String, bool> _hovering = {}; // track hover state for nav items
+  String activeNav = 'Home';
+  final Map<String, bool> _hovering = {};
 
   void _setHover(String name, bool val) {
     setState(() {
@@ -55,46 +52,132 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void navigateToProduct(BuildContext context) {
-    setActive(''); // clear or set to product if you want
+    setActive('Product');
     Navigator.pushNamed(context, '/product');
   }
 
   void placeholderCallbackForButtons() {
-    // This is the event handler for buttons that don't work yet
+    // placeholder
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF4d2963)),
+              child: const Text('Union Shop', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                setActive('Home');
+                Navigator.pop(context);
+                navigateToHome(context);
+              },
+            ),
+            ExpansionTile(
+              title: const Text('Shop'),
+              children: [
+                ListTile(
+                  title: const Text('Clothing'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    placeholderCallbackForButtons();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Accessories'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    placeholderCallbackForButtons();
+                  },
+                ),
+              ],
+            ),
+            ExpansionTile(
+              title: const Text('The Print Shack'),
+              children: [
+                ListTile(
+                  title: const Text('Services'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    placeholderCallbackForButtons();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Pricing'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    placeholderCallbackForButtons();
+                  },
+                ),
+              ],
+            ),
+            ListTile(
+              title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              onTap: () {
+                setActive('SALE!');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('About'),
+              onTap: () {
+                setActive('About');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('UPSU.net'),
+              onTap: () {
+                setActive('UPSU.net');
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
     return Scaffold(
+      drawer: isMobile ? _buildDrawer(context) : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Header
             Container(
-              height: 175,
+              height: isMobile ? 120 : 175,
               color: Colors.white,
               child: Column(
                 children: [
                   // Top banner
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                    padding: EdgeInsets.symmetric(vertical: isMobile ? 8 : 10, horizontal: isMobile ? 12 : 40),
                     color: const Color(0xFF4d2963),
                     child: const Text(
                       'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
                   // Main header
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 50),
                       child: LayoutBuilder(
                         builder: (context, constraints) {
-                          final isMobile = constraints.maxWidth < 700;
-                          if (isMobile) {
-                            // Mobile: show logo + menu button (opens drawer)
+                          final headerIsMobile = constraints.maxWidth < 700;
+                          if (headerIsMobile) {
+                            // Mobile header: logo + hamburger
                             return Row(
                               children: [
                                 GestureDetector(
@@ -116,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
 
-                          // Desktop / wide: centered horizontal nav with dropdowns
+                          // Desktop header: logo + nav + icons (no hamburger)
                           return Row(
                             children: [
                               GestureDetector(
@@ -130,19 +213,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                     const SizedBox(width: 8),
+                                    const Text('Union Shop', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
                                   ],
                                 ),
                               ),
 
-                              // center nav items: use Row on wide screens so items stay horizontal,
-                              // fall back to Wrap when space is limited.
+                              // center nav items
                               Expanded(
                                 child: LayoutBuilder(
                                   builder: (context, c) {
-                                    final useRow = true; // keep horizontal for now
-
+                                    final useRow = c.maxWidth > 520;
                                     final navItems = <Widget>[
-                                      // Home (hover + active underline)
+                                      // Home (hover + active)
                                       MouseRegion(
                                         onEnter: (_) => _setHover('Home', true),
                                         onExit: (_) => _setHover('Home', false),
@@ -158,9 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(
                                               'Home',
                                               style: TextStyle(
-                                                decoration: (activeNav == 'Home' || (_hovering['Home'] ?? false))
-                                                    ? TextDecoration.underline
-                                                    : TextDecoration.none,
+                                                decoration: (activeNav == 'Home' || (_hovering['Home'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                                 color: Colors.black,
                                               ),
                                             ),
@@ -168,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
 
-                                      // Shop (popup) with hover underline
+                                      // Shop (popup)
                                       MouseRegion(
                                         onEnter: (_) => _setHover('Shop', true),
                                         onExit: (_) => _setHover('Shop', false),
@@ -192,9 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     'Shop',
                                                     style: TextStyle(
-                                                      decoration: (activeNav == 'Shop' || (_hovering['Shop'] ?? false))
-                                                          ? TextDecoration.underline
-                                                          : TextDecoration.none,
+                                                      decoration: (activeNav == 'Shop' || (_hovering['Shop'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -207,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
 
-                                      // The Print Shack (popup) with hover underline
+                                      // The Print Shack (popup)
                                       MouseRegion(
                                         onEnter: (_) => _setHover('The Print Shack', true),
                                         onExit: (_) => _setHover('The Print Shack', false),
@@ -230,9 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     'The Print Shack',
                                                     style: TextStyle(
-                                                      decoration: (activeNav == 'The Print Shack' || (_hovering['The Print Shack'] ?? false))
-                                                          ? TextDecoration.underline
-                                                          : TextDecoration.none,
+                                                      decoration: (activeNav == 'The Print Shack' || (_hovering['The Print Shack'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -245,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
 
-                                      // SALE! with hover underline
+                                      // SALE!
                                       MouseRegion(
                                         onEnter: (_) => _setHover('SALE!', true),
                                         onExit: (_) => _setHover('SALE!', false),
@@ -261,18 +337,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(
                                               'SALE!',
                                               style: TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.red,
                                                 fontWeight: FontWeight.bold,
-                                                decoration: (activeNav == 'SALE!' || (_hovering['SALE!'] ?? false))
-                                                    ? TextDecoration.underline
-                                                    : TextDecoration.none,
+                                                decoration: (activeNav == 'SALE!' || (_hovering['SALE!'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
 
-                                      // About with hover underline
+                                      // About
                                       MouseRegion(
                                         onEnter: (_) => _setHover('About', true),
                                         onExit: (_) => _setHover('About', false),
@@ -288,9 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(
                                               'About',
                                               style: TextStyle(
-                                                decoration: (activeNav == 'About' || (_hovering['About'] ?? false))
-                                                    ? TextDecoration.underline
-                                                    : TextDecoration.none,
+                                                decoration: (activeNav == 'About' || (_hovering['About'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                                 color: Colors.black,
                                               ),
                                             ),
@@ -303,18 +375,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.max,
-                                        children: navItems
-                                            .map((w) => Padding(padding: const EdgeInsets.symmetric(horizontal: 6.0), child: w))
-                                            .toList(),
+                                        children: navItems.map((w) => Padding(padding: const EdgeInsets.symmetric(horizontal: 6.0), child: w)).toList(),
                                       );
                                     }
 
-                                    return const SizedBox.shrink();
+                                    // fallback (rare): wrap
+                                    return Center(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        spacing: 12,
+                                        runSpacing: 6,
+                                        children: navItems,
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
 
-                              // right-side icons (optional)
+                              // right-side icons (desktop only)
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -330,6 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     icon: const Icon(Icons.shopping_bag_outlined, size: 24, color: Colors.black),
                                     onPressed: placeholderCallbackForButtons,
                                   ),
+                                  // no menu icon here on desktop
                                 ],
                               )
                             ],
@@ -344,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Hero Section
             SizedBox(
-              height: 475,
+              height: isMobile ? 320 : 475,
               width: double.infinity,
               child: Stack(
                 children: [
@@ -361,48 +440,47 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.2),
+                          color: Colors.black.withOpacity(0.2),
                         ),
                       ),
                     ),
                   ),
                   // Content overlay
                   Positioned(
-                    left: 24,
-                    right: 24,
-                    top: 80,
+                    left: isMobile ? 12 : 24,
+                    right: isMobile ? 12 : 24,
+                    top: isMobile ? 40 : 80,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Essential Range - Over 20% OFF!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 65,
+                            fontSize: isMobile ? 26 : 65,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             height: 1.2,
-                            fontFamily: '',
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
+                        SizedBox(height: isMobile ? 12 : 16),
+                        Text(
                           "Over 20% off our Essential Range. Come and grab yours while stock lasts!",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: isMobile ? 14 : 24,
                             color: Colors.white,
-                            height: 1.5,
-                            fontWeight: FontWeight.bold,
+                            height: 1.4,
+                            fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 32),
+                        SizedBox(height: isMobile ? 20 : 32),
                         ElevatedButton(
                           onPressed: placeholderCallbackForButtons,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4d2963),
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: isMobile ? 12 : 24),
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
@@ -423,24 +501,24 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: EdgeInsets.all(isMobile ? 16.0 : 40.0),
                 child: Column(
                   children: [
-                    const Text(
-                      'EESENTIAL RANGE - OVER 20% OFF!',
+                    Text(
+                      'ESSENTIAL RANGE - OVER 20% OFF!',
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize: isMobile ? 18 : 25,
                         color: Colors.black,
                         letterSpacing: 1,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    SizedBox(height: isMobile ? 20 : 48),
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                      crossAxisCount: isMobile ? 1 : 2,
+                      childAspectRatio: isMobile ? 1.0 : 1.7,
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 48,
                       children: const [
@@ -482,6 +560,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(24),
               child: const Text(
                 'Placeholder Footer',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -496,6 +575,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+// ProductCard (adjusted to keep aspect ratio on mobile)
 class ProductCard extends StatelessWidget {
   final String title;
   final String price;
@@ -517,35 +597,43 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(Icons.image_not_supported, color: Colors.grey),
-                  ),
-                );
-              },
+          // keep image square-ish so descriptions aren't crushed
+          AspectRatio(
+            aspectRatio: 1,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(Icons.image_not_supported, color: Colors.grey),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 14, color: Colors.black),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                price,
-                style: const TextStyle(fontSize: 13, color: Colors.grey),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  price,
+                  style: const TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+              ],
+            ),
           ),
         ],
       ),
