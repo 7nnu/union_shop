@@ -6,6 +6,7 @@ import 'package:union_shop/views/custom_footer.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/views/product_tile.dart';
+import 'package:union_shop/views/login_page.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -27,6 +28,7 @@ class UnionShopApp extends StatelessWidget {
       routes: {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
+        '/login': (context) => const LoginPage(),
       },
     );
   }
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 visualDensity: VisualDensity.compact,
                 padding: const EdgeInsets.all(6),
                 icon: const Icon(Icons.person_outline, color: Colors.white),
-                onPressed: placeholderCallbackForButtons,
+                onPressed: () => navigateToLogin(context),
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
@@ -142,7 +144,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void placeholderCallbackForButtons() {
-    // placeholder
+    // default placeholder now navigates to login (header's profile button uses this)
+    navigateToLogin(context);
+  }
+
+  void navigateToLogin(BuildContext context) {
+    setActive('Login');
+    Navigator.pushNamed(context, '/login');
   }
 
   Widget _buildDrawer(BuildContext context) {
