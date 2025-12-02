@@ -44,8 +44,9 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     ).then((_) {
-      // optional: clear field after confirmation
+      // clear field and return to home screen
       _emailController.clear();
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     });
   }
 
