@@ -131,3 +131,18 @@ const List<Product> sampleClothingProducts = [
     imageUrl: 'assets/images/jacket.png',
   ),
 ];
+
+const List<Product> sampleSaleProducts = [
+ Product(
+    title: 'Beanie — Pink (Pom)',
+    original: '£12.00',
+    price: '£9.00',
+    imageUrl: 'assets/images/pink_beanie.png',
+  ),
+  Product(
+    title: 'Beanie — Navy',
+    original: '£12.00',
+    price: '£9.00',
+    imageUrl: 'assets/images/navy_beanie.png',
+  ),
+];
