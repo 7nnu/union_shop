@@ -178,16 +178,24 @@ const List<Product> sampleSaleProducts = [
     imageUrl: 'assets/images/navy_beanie.png',
   ),
     Product(
-    title: 'University Tote Bag',
-    original: '£8.00',
-    price: '£5.00',
-    imageUrl: 'assets/images/tote_bag.png',
+    title: 'Essential Hoodie',
+    original: '£25.00',
+    price: '£18.00',
+    imageUrl: 'assets/images/hoodie.png',
   ),
+
   Product(
-    title: 'University Mug',
-    original: '£10.00',
-    price: '£7.00',
-    imageUrl: 'assets/images/mug.png',
+    title: 'Essential T-Shirt',
+    original: '£15.00',
+    price: '£10.00',
+    imageUrl: 'assets/images/tshirt.png',
+  ),
+
+  Product(
+    title: 'Essential Jacket',
+    original: '£50.00',
+    price: '£35.00',
+    imageUrl: 'assets/images/jacket.png',
   ),
 ];
 
