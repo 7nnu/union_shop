@@ -33,6 +33,65 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String activeNav = 'Home';
   final Map<String, bool> _hovering = {};
+  bool _mobileMenuOpen = false; // track mobile menu state
+
+  // returns the list content used by both drawer and the slide-down menu
+  Widget _drawerContent(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        Container(
+          color: const Color(0xFF4d2963),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Image.network(
+                'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                height: 36,
+                errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
+              ),
+              const Spacer(),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.person_outline, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.all(6),
+                icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                onPressed: placeholderCallbackForButtons,
+              ),
+            ],
+          ),
+        ),
+        ListTile(title: const Text('Home'), onTap: () { setActive('Home'); Navigator.pop(context); navigateToHome(context); }),
+        const Divider(height: 1),
+        ExpansionTile(title: const Text('Shop'), children: [
+          ListTile(title: const Text('Clothing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+          ListTile(title: const Text('Accessories'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ]),
+        const Divider(height: 1),
+        ExpansionTile(title: const Text('The Print Shack'), children: [
+          ListTile(title: const Text('Services'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+          ListTile(title: const Text('Pricing'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ]),
+        const Divider(height: 1),
+        ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
+        const Divider(height: 1),
+        ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); }),
+        const Divider(height: 1),
+        ListTile(title: const Text('UPSU.net'), onTap: () { setActive('UPSU.net'); Navigator.pop(context); }),
+      ],
+    );
+  }
 
   void _setHover(String name, bool val) {
     setState(() {
@@ -61,100 +120,74 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xFF4d2963)),
-              child: const Text('Union Shop', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                setActive('Home');
-                Navigator.pop(context);
-                navigateToHome(context);
-              },
-            ),
-            ExpansionTile(
-              title: const Text('Shop'),
+    // keep for compatibility (side-drawer) but not used when mobile uses slide-down
+    return Drawer(child: SafeArea(child: _drawerContent(context)));
+  }
+
+  // toggles the slide-down mobile menu
+  void _toggleMobileMenu(BuildContext context, double headerHeight) {
+    if (_mobileMenuOpen) {
+      Navigator.of(context).pop(); // dismiss the dialog
+      setState(() => _mobileMenuOpen = false);
+      return;
+    }
+
+    setState(() => _mobileMenuOpen = true);
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Menu',
+      transitionDuration: const Duration(milliseconds: 300),
+      // place the menu below the header by leaving a SizedBox(height: headerHeight) first
+      pageBuilder: (ctx, a1, a2) {
+        final remainingHeight = MediaQuery.of(ctx).size.height - headerHeight;
+        return SafeArea(
+          child: Material(
+            color: Colors.transparent,
+            child: Column(
               children: [
-                ListTile(
-                  title: const Text('Clothing'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    placeholderCallbackForButtons();
-                  },
-                ),
-                ListTile(
-                  title: const Text('Accessories'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    placeholderCallbackForButtons();
-                  },
+                // empty space reserved for the navbar/header
+                SizedBox(height: headerHeight),
+                // the sliding menu content
+                Container(
+                  height: remainingHeight,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: _drawerContent(ctx),
                 ),
               ],
             ),
-            ExpansionTile(
-              title: const Text('The Print Shack'),
-              children: [
-                ListTile(
-                  title: const Text('Services'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    placeholderCallbackForButtons();
-                  },
-                ),
-                ListTile(
-                  title: const Text('Pricing'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    placeholderCallbackForButtons();
-                  },
-                ),
-              ],
-            ),
-            ListTile(
-              title: const Text('SALE!', style: TextStyle(color: Colors.black)),
-              onTap: () {
-                setActive('SALE!');
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('About'),
-              onTap: () {
-                setActive('About');
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('UPSU.net'),
-              onTap: () {
-                setActive('UPSU.net');
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
+      },
+      transitionBuilder: (ctx, anim, a2, child) {
+        final curved = CurvedAnimation(parent: anim, curve: Curves.easeOut);
+        return SlideTransition(
+          position: Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero).animate(curved),
+          child: FadeTransition(opacity: anim, child: child),
+        );
+      },
+    ).then((_) {
+      // when dismissed (tap outside or Navigator.pop) clear state
+      if (mounted) setState(() => _mobileMenuOpen = false);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
+    final headerHeight = isMobile ? 120.0 : 175.0;
 
     return Scaffold(
-      drawer: isMobile ? _buildDrawer(context) : null,
+      // don't use the side drawer on mobile; we use a slide-down dialog instead.
+      drawer: null,
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Header
             Container(
-              height: isMobile ? 120 : 175,
+              height: headerHeight,
               color: Colors.white,
               child: Column(
                 children: [
@@ -201,11 +234,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   icon: const Icon(Icons.shopping_bag_outlined, size: 20, color: Colors.black),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
-                                Builder(
-                                  builder: (scaffoldCtx) => IconButton(
-                                    icon: const Icon(Icons.menu, color: Colors.black),
-                                    onPressed: () => Scaffold.of(scaffoldCtx).openDrawer(),
-                                  ),
+                                // show menu or X depending on open state, slide-down from beneath header
+                                IconButton(
+                                  icon: Icon(_mobileMenuOpen ? Icons.close : Icons.menu, color: Colors.black),
+                                  onPressed: () => _toggleMobileMenu(context, headerHeight),
                                 ),
                               ],
                             );
