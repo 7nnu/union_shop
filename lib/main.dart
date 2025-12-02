@@ -3,6 +3,9 @@ import 'package:union_shop/product_page.dart';
 import 'package:union_shop/views/about_page.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
+import 'package:union_shop/models/product.dart';
+import 'package:union_shop/data/products.dart';
+import 'package:union_shop/views/product_tile.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -207,51 +210,67 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       // Content overlay
-                      Positioned(
-                        left: isMobile ? 12 : 24,
-                        right: isMobile ? 12 : 24,
-                        top: isMobile ? 40 : 80,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Essential Range - Over 20% OFF!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: isMobile ? 26 : 65,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                height: 1.2,
-                              ),
-                            ),
-                            SizedBox(height: isMobile ? 12 : 16),
-                            Text(
-                              "Over 20% off our Essential Range. Come and grab yours while stock lasts!",
-                              style: TextStyle(
-                                fontSize: isMobile ? 14 : 24,
-                                color: Colors.white,
-                                height: 1.4,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: isMobile ? 20 : 32),
-                            ElevatedButton(
-                              onPressed: placeholderCallbackForButtons,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF4d2963),
-                                foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: isMobile ? 12 : 24),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
+                      Positioned.fill(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: isMobile ? 12 : 24,
+                            right: isMobile ? 12 : 24,
+                            top: isMobile ? 40 : 80,
+                          ),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: SingleChildScrollView(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  // ensure overlay cannot grow beyond the hero height
+                                  maxHeight: isMobile ? 280 : 420,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Essential Range - Over 20% OFF!',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 26 : 65,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                    SizedBox(height: isMobile ? 12 : 16),
+                                    Text(
+                                      "Over 20% off our Essential Range. Come and grab yours while stock lasts!",
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 14 : 24,
+                                        color: Colors.white,
+                                        height: 1.4,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: isMobile ? 20 : 32),
+                                    ElevatedButton(
+                                      onPressed: placeholderCallbackForButtons,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF4d2963),
+                                        foregroundColor: Colors.white,
+                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: isMobile ? 12 : 24),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'BROWSE COLLECTION',
+                                        style: TextStyle(fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              child: const Text(
-                                'BROWSE COLLECTION',
-                                style: TextStyle(fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
-                              ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ],
@@ -275,39 +294,36 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(height: isMobile ? 20 : 48),
-                        GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: isMobile ? 1 : 2,
-                          childAspectRatio: isMobile ? 1.0 : 1.7,
-                          crossAxisSpacing: 24,
-                          mainAxisSpacing: 48,
-                          children: const [
-                            ProductCard(
-                              title: 'Placeholder Product 1',
-                              price: '£10.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 2',
-                              price: '£15.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 3',
-                              price: '£20.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 4',
-                              price: '£25.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                          ],
+                        // Center the product area and constrain its maximum width so two columns
+                        // align like the provided screenshot. Item widths are computed from the
+                        // constrained content width to avoid odd gaps.
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final totalWidth = constraints.maxWidth;
+                            const maxContentWidth = 1100.0; // adjust to taste to match screenshot
+                            final contentWidth = totalWidth > maxContentWidth ? maxContentWidth : totalWidth;
+
+                            final spacing = isMobile ? 16.0 : 20.0;
+                            final runSpacing = isMobile ? 20.0 : 20.0;
+
+                            // For mobile use a single column, otherwise two columns.
+                            final columns = isMobile ? 1 : 2;
+                            final itemWidth = (contentWidth - (spacing * (columns - 1))) / columns;
+
+                            return Center(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  spacing: spacing,
+                                  runSpacing: runSpacing,
+                                  children: sampleProducts
+                                      .map((prod) => SizedBox(width: itemWidth, child: ProductTile(product: prod)))
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -342,72 +358,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-// ProductCard (adjusted to keep aspect ratio on mobile)
-class ProductCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String imageUrl;
-
-  const ProductCard({
-    super.key,
-    required this.title,
-    required this.price,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/product');
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // keep image square-ish so descriptions aren't crushed
-          AspectRatio(
-            aspectRatio: 1,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Icon(Icons.image_not_supported, color: Colors.grey),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
-                  maxLines: 2,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  price,
-                  style: const TextStyle(fontSize: 13, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

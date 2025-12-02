@@ -13,10 +13,28 @@ class _CustomFooterState extends State<CustomFooter> {
 
   void _subscribe() {
     final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter an email')),
+      );
+      return;
+    }
+
+    final lower = email.toLowerCase();
+    final allowed = ['@gmail.com', '@myport.ac.uk'];
+    final valid = allowed.any((s) => lower.endsWith(s));
+
+    if (!valid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter an email that ends with @gmail.com or @myport.ac.uk')),
+      );
+      return;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(email.isEmpty ? 'Please enter an email' : 'Subscribed: $email')),
+      SnackBar(content: Text('Subscribed: $email')),
     );
-    if (email.isNotEmpty) _emailController.clear();
+    _emailController.clear();
   }
 
   Widget _buildSectionTitle(String title) {
