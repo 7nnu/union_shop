@@ -212,7 +212,11 @@ class CustomHeader extends StatelessWidget {
                                   child: PopupMenuButton<String>(
                                     onSelected: (v) {
                                       onSetActive('The Print Shack');
-                                      placeholderCallback();
+                                      if (v == 'about') {
+                                        Navigator.pushNamed(context, '/printshack-about');
+                                      } else {
+                                        placeholderCallback();
+                                      }
                                     },
                                     itemBuilder: (_) => const [
                                       PopupMenuItem(value: 'about', child: Text('About')),
