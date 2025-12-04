@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/views/product_tile.dart';
+import 'package:union_shop/views/custom_header.dart';
+import 'package:union_shop/views/custom_footer.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -12,7 +14,15 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   List<Product> _results = sampleAllProducts;
+
+  // header state for CustomHeader
+  final Map<String, bool> _hovering = {};
+  bool _mobileMenuOpen = false;
+
+  void _setHover(String name, bool val) => setState(() => _hovering[name] = val);
+  void _toggleMobileMenu() => setState(() => _mobileMenuOpen = !_mobileMenuOpen);
 
   void _update(String q) {
     final query = q.trim().toLowerCase();
@@ -42,7 +52,62 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
+    final children = <Widget>[];
+    if (showTopIcons) {
+      children.add(Container(
+        color: const Color(0xFF4d2963),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(children: [
+          Image.network('https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854', height: 36, errorBuilder: (c,e,s)=> const SizedBox(width:36,height:36)),
+          const Spacer(),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.all(6),
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              final isMobileLocal = MediaQuery.of(context).size.width < 700;
+              if (showTopIcons) Navigator.pop(context);
+              if (isMobileLocal) {
+                // focus local search field
+                _focusNode.requestFocus();
+              } else {
+                showSearch(context: context, delegate: ProductSearchDelegate());
+              }
+            },
+          ),
+          IconButton(visualDensity: VisualDensity.compact, padding: const EdgeInsets.all(6), icon: const Icon(Icons.person_outline, color: Colors.white), onPressed: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/login'); }),
+          IconButton(visualDensity: VisualDensity.compact, padding: const EdgeInsets.all(6), icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white), onPressed: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/cart'); }),
+        ]),
+      ));
+    }
+
+    children.addAll([
+      ListTile(title: const Text('Home'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false); }),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('Shop'), children: [
+        ListTile(title: const Text('Clothing'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/clothing'); }),
+        ListTile(title: const Text('Merchandise'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/merchandise'); }),
+        ListTile(title: const Text('Essentials'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/essentials'); }),
+        ListTile(title: const Text('Winter'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/winter'); }),
+        ListTile(title: const Text('All'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/all'); }),
+      ]),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('The Print Shack'), children: [
+        ListTile(title: const Text('About'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/printshack-about'); }),
+        ListTile(title: const Text('Personalisation'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/printshack-personalisation'); }),
+      ]),
+      const Divider(height: 1),
+      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/sale'); }),
+      const Divider(height: 1),
+      ListTile(title: const Text('About'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/about'); }),
+    ]);
+
+    return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
   }
 
   Widget _buildResults(BuildContext context) {
@@ -68,38 +133,101 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
+    final headerHeight = isMobile ? 120.0 : 130.0;
+    final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: TextField(
-          controller: _controller,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Search products',
-            border: InputBorder.none,
+      drawer: null,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomHeader(
+                  isMobile: isMobile,
+                  activeNav: 'Search',
+                  hovering: _hovering,
+                  onHover: _setHover,
+                  onSetActive: (s) {},
+                  placeholderCallback: () => Navigator.pushNamed(context, '/login'),
+                  toggleMobileMenu: _toggleMobileMenu,
+                  mobileMenuOpen: _mobileMenuOpen,
+                  navigateToHome: (ctx) => Navigator.pushNamedAndRemoveUntil(ctx, '/', (r) => false),
+                  navigateToProduct: (ctx) => Navigator.pushNamed(ctx, '/product'),
+                  navigateToAbout: (ctx) => Navigator.pushNamed(ctx, '/about'),
+                  navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
+                  navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
+                  navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
+                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
+                  navigateToSearch: (ctx) {
+                    final isM = MediaQuery.of(ctx).size.width < 700;
+                    if (isM) {
+                      // focus the inline search field on mobile header action
+                      _focusNode.requestFocus();
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
+                  },
+                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
+                ),
+
+                // in-page search box (visually replaces the AppBar title field)
+                Padding(
+                  padding: EdgeInsets.all(isMobile ? 12 : 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: 'Search products',
+                          border: OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              if (_controller.text.isEmpty) {
+                                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                                return;
+                              }
+                              _controller.clear();
+                              _update('');
+                            },
+                          ),
+                        ),
+                        onChanged: _update,
+                        onSubmitted: (_) => _update(_controller.text),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildResults(context),
+                    ],
+                  ),
+                ),
+
+                const CustomFooter(),
+              ],
+            ),
           ),
-          onChanged: _update,
-        ),
-        backgroundColor: const Color(0xFF4d2963),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              if (_controller.text.isEmpty) {
-                // no query — return to home screen
-                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-                return;
-              }
-              // has query — clear it
-              _controller.clear();
-              _update('');
-            },
-          )
+
+          // mobile slide-down menu
+          if (_mobileMenuOpen)
+            Positioned(
+              top: headerHeight,
+              left: 0,
+              right: 0,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                constraints: BoxConstraints(maxHeight: remainingHeight),
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))]),
+                child: SingleChildScrollView(child: _drawerContent(context, showTopIcons: false)),
+              ),
+            ),
         ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(isMobile ? 12 : 20),
-        child: _buildResults(context),
       ),
     );
   }
@@ -204,7 +332,11 @@ class ProductSearchDelegate extends SearchDelegate<Product?> {
                       query = controller.text;
                       showResults(context);
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4d2963)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4d2963),
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(color: Colors.white)
+                    ),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 14.0),
                       child: Text('SUBMIT', style: TextStyle(fontWeight: FontWeight.bold)),
