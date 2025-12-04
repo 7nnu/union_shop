@@ -102,8 +102,11 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                    if (isMobileLocal) Navigator.pushNamed(ctx, '/search');
-                    else showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),

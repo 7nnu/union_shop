@@ -13,8 +13,6 @@ class OrderConfirmationPage extends StatelessWidget {
     final List<CartItem> items = args is List<CartItem> ? args : [];
 
     final isMobile = MediaQuery.of(context).size.width < 700;
-    final headerHeight = isMobile ? 120.0 : 130.0;
-    final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
 
     final subtotal = items.fold<double>(0.0, (s, it) => s + it.totalPrice);
 
@@ -45,8 +43,11 @@ class OrderConfirmationPage extends StatelessWidget {
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                    if (isMobileLocal) Navigator.pushNamed(ctx, '/search');
-                    else showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
@@ -59,7 +60,7 @@ class OrderConfirmationPage extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text('Order Number 0000', textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 22 : 28, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 18),
-                      Text('Thank you for your order! Here is a summary of what you purchased:', textAlign: TextAlign.center, style: const TextStyle(color: Colors.black87)),
+                      const Text('Thank you for your order! Here is a summary of what you purchased:', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87)),
                       const SizedBox(height: 18),
 
                       if (items.isEmpty)

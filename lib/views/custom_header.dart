@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:union_shop/views/search_page.dart';
 
 
 class CustomHeader extends StatefulWidget {
@@ -386,7 +385,7 @@ class _CustomHeaderState extends State<CustomHeader> {
                             IconButton(
                               icon: const Icon(Icons.search),
                               onPressed: () {
-                                widget.navigateToSearch?.call(context);
+                                widget.navigateToSearch.call(context);
                               },
                             ),
 

@@ -170,12 +170,11 @@ class _ProductPageState extends State<ProductPage> {
                           width: double.infinity,
                           child: OutlinedButton(
                             onPressed: () {
-                              if (product == null) return;
                               final route = _collectionRouteForProduct(product);
                               Navigator.pushNamed(context, route);
                             },
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: const Color(0xFF4d2963)),
+                              side: const BorderSide(color: Color(0xFF4d2963)),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             child: const Text('BACK TO COLLECTION', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
@@ -245,7 +244,7 @@ class _ProductPageState extends State<ProductPage> {
                   const Text('Color', style: TextStyle(color: Colors.grey, fontSize: 13)),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
-                    value: _selectedColor,
+                    initialValue: _selectedColor,
                     items: ['Black', 'White', 'Purple', 'Grey', 'Navy'].map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                     onChanged: (v) => setState(() => _selectedColor = v ?? _selectedColor),
                     decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), border: OutlineInputBorder()),
@@ -265,7 +264,7 @@ class _ProductPageState extends State<ProductPage> {
                     const Text('Size', style: TextStyle(color: Colors.grey, fontSize: 13)),
                     const SizedBox(height: 6),
                     DropdownButtonFormField<String>(
-                      value: _selectedSize,
+                      initialValue: _selectedSize,
                       items: ['S', 'M', 'L', 'XL'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
                       onChanged: (v) => setState(() => _selectedSize = v ?? _selectedSize),
                       decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), border: OutlineInputBorder()),
@@ -308,11 +307,11 @@ class _ProductPageState extends State<ProductPage> {
               final size = _isMerchandise(product) ? null : _selectedSize;
               Cart().addProduct(product, color: _selectedColor, size: size, quantity: _quantity);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Added ${product.title} x$_quantity (${_selectedColor}${size != null ? ', $size' : ''}) to cart')),
+                SnackBar(content: Text('Added ${product.title} x$_quantity ($_selectedColor${size != null ? ', $size' : ''}) to cart')),
               );
             },
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: const Color(0xFF4d2963)),
+              side: const BorderSide(color: Color(0xFF4d2963)),
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
             child: const Text('ADD TO CART', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),

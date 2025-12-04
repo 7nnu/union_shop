@@ -148,8 +148,8 @@ class _CustomFooterState extends State<CustomFooter> {
           height: 44,
           child: TextField(
             controller: _emailController,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               hintText: 'Email address',
               border: OutlineInputBorder(borderRadius: BorderRadius.zero),
               filled: true,
@@ -175,6 +175,7 @@ class _CustomFooterState extends State<CustomFooter> {
   }
 
   // helper: slightly more compact badge variant used on mobile
+  // ignore: non_constant_identifier_names
   Widget _payment_badge_small(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -245,8 +246,8 @@ class _CustomFooterState extends State<CustomFooter> {
                 height: 40,
                 child: TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     hintText: 'Email address',
                     border: OutlineInputBorder(borderRadius: BorderRadius.zero),
                     filled: true,

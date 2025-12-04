@@ -61,7 +61,7 @@ class _PrintShackPersonalisationPageState extends State<PrintShackPersonalisatio
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Added Personalisation x$_quantity${line1 != null ? ' (\"$line1\"' : ''}${line2 != null ? ', \"$line2\"' : ''}) to cart')),
+      SnackBar(content: Text('Added Personalisation x$_quantity${line1 != null ? ' ("${line1}"' : ''}${line2 != null ? ', \"$line2\"' : ''}) to cart')),
     );
   }
 
@@ -73,8 +73,6 @@ class _PrintShackPersonalisationPageState extends State<PrintShackPersonalisatio
 
     // We create a lightweight Product for this personalisation item.
     // Price will be £3 for one line, £5 for two lines (we keep price in product.price for display)
-    final basePrice = _linesOption == 'One Line of Text' ? '£3.00' : '£5.00';
-    final product = Product(title: 'Personalisation', original: '', price: basePrice, imageUrl: 'assets/images/hoodie.png');
 
     return Scaffold(
       drawer: null,
@@ -257,8 +255,11 @@ class _PrintShackPersonalisationPageState extends State<PrintShackPersonalisatio
             onPressed: () {
               final isMobileLocal = MediaQuery.of(context).size.width < 700;
               if (showTopIcons) Navigator.pop(context);
-              if (isMobileLocal) Navigator.pushNamed(context, '/search');
-              else showSearch(context: context, delegate: ProductSearchDelegate());
+              if (isMobileLocal) {
+                Navigator.pushNamed(context, '/search');
+              } else {
+                showSearch(context: context, delegate: ProductSearchDelegate());
+              }
             },
           ),
           IconButton(

@@ -186,7 +186,7 @@ class _SearchPageState extends State<SearchPage> {
                         autofocus: true,
                         decoration: InputDecoration(
                           hintText: 'Search products',
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.clear),
                             onPressed: () {

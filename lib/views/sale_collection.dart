@@ -28,10 +28,6 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
   void _toggleMobileMenu() =>
       setState(() => _mobileMenuOpen = !_mobileMenuOpen);
 
-  void _navigateToHome() =>
-      Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
-  void _navigateToProduct() => Navigator.pushNamed(context, '/product');
-  void _navigateToAbout() => Navigator.pushNamed(context, '/about');
   void _navigateToLogin() => Navigator.pushNamed(context, '/login');
 
   final List<String> _filters = [
@@ -83,10 +79,6 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
 
   // standardized drawer matching main.dart (supports showTopIcons for Drawer vs slide-down)
   Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
-    void doNav(String route) {
-      if (showTopIcons) Navigator.pop(context);
-      Navigator.pushNamed(context, route);
-    }
 
     final children = <Widget>[];
     if (showTopIcons) {
@@ -108,11 +100,12 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
               onPressed: () {
                 final isMobileLocal = MediaQuery.of(context).size.width < 700;
                 if (showTopIcons) Navigator.pop(context);
-                if (isMobileLocal)
+                if (isMobileLocal) {
                   Navigator.pushNamed(context, '/search');
-                else
+                } else {
                   showSearch(
                       context: context, delegate: ProductSearchDelegate());
+                }
               },
             ),
             IconButton(
@@ -303,7 +296,7 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
                           children: [
                             // Filter
                             Text('FILTER BY', style: labelStyle),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             DropdownButton<String>(
                               value: _filter,
                               style: dropdownTextStyle,
@@ -319,7 +312,7 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
                             ),
                             SizedBox(width: smallGap),
                             Text('SORT BY', style: labelStyle),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             DropdownButton<String>(
                               value: _sort,
                               style: dropdownTextStyle,

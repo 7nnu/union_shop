@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:union_shop/models/product.dart';
 import 'package:union_shop/models/cart.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
@@ -36,8 +35,11 @@ class _CartPageState extends State<CartPage> {
             onPressed: () {
               final isMobileLocal = MediaQuery.of(context).size.width < 700;
               if (showTopIcons) Navigator.pop(context);
-              if (isMobileLocal) Navigator.pushNamed(context, '/search');
-              else showSearch(context: context, delegate: ProductSearchDelegate());
+              if (isMobileLocal) {
+                Navigator.pushNamed(context, '/search');
+              } else {
+                showSearch(context: context, delegate: ProductSearchDelegate());
+              }
             },
           ),
           IconButton(
@@ -127,8 +129,11 @@ class _CartPageState extends State<CartPage> {
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                    if (isMobileLocal) Navigator.pushNamed(ctx, '/search');
-                    else showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
@@ -223,7 +228,7 @@ class _CartPageState extends State<CartPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Subtotal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                const Text('Subtotal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                 Text('£${cart.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                               ],
                             ),

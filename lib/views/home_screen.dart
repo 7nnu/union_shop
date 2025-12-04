@@ -206,6 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Desktop: show SearchDelegate and navigate to product page if a product is selected.
     final result = await showSearch<Product?>(context: context, delegate: ProductSearchDelegate());
     if (result != null) {
+      // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, '/product', arguments: result);
     }
   }
@@ -298,6 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
+                                // ignore: deprecated_member_use
                                 child: Container(color: Colors.black.withOpacity(0.25)),
                               ),
                               // overlay content
@@ -368,7 +370,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isPlaying = !_isPlaying;
-                                  if (_isPlaying) _startAutoPlay(); else _stopAutoPlay();
+                                  if (_isPlaying) {
+                                    _startAutoPlay();
+                                  } else {
+                                    _stopAutoPlay();
+                                  }
                                 });
                               },
                             ),
@@ -414,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return Center(
                               child: ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                                constraints: const BoxConstraints(maxWidth: maxContentWidth),
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   spacing: spacing,
@@ -467,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return Center(
                               child: ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                                constraints: const BoxConstraints(maxWidth: maxContentWidth),
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   spacing: spacing,

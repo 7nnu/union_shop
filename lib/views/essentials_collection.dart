@@ -26,9 +26,6 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
   void _setActive(String name) => setState(() => activeNav = name);
   void _toggleMobileMenu() => setState(() => _mobileMenuOpen = !_mobileMenuOpen);
 
-  void _navigateToHome() => Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
-  void _navigateToProduct() => Navigator.pushNamed(context, '/product');
-  void _navigateToAbout() => Navigator.pushNamed(context, '/about');
   void _navigateToLogin() => Navigator.pushNamed(context, '/login');
 
   final List<String> _filters = [
@@ -88,8 +85,11 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
             onPressed: () {
               final isMobileLocal = MediaQuery.of(context).size.width < 700;
               if (showTopIcons) Navigator.pop(context);
-              if (isMobileLocal) Navigator.pushNamed(context, '/search');
-              else showSearch(context: context, delegate: ProductSearchDelegate());
+              if (isMobileLocal) {
+                Navigator.pushNamed(context, '/search');
+              } else {
+                showSearch(context: context, delegate: ProductSearchDelegate());
+              }
             },
           ),
           IconButton(
@@ -201,7 +201,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                           children: [
                             // Filter
                             Text('FILTER BY', style: labelStyle),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             DropdownButton<String>(
                               value: _filter,
                               style: dropdownTextStyle,
@@ -212,7 +212,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                             ),
                             SizedBox(width: smallGap),
                             Text('SORT BY', style: labelStyle),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             DropdownButton<String>(
                               value: _sort,
                               style: dropdownTextStyle,

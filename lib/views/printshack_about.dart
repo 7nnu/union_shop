@@ -34,8 +34,11 @@ class _PrintShackAboutPageState extends State<PrintShackAboutPage> {
             onPressed: () {
               final isMobileLocal = MediaQuery.of(context).size.width < 700;
               if (showTopIcons) Navigator.pop(context);
-              if (isMobileLocal) Navigator.pushNamed(context, '/search');
-              else showSearch(context: context, delegate: ProductSearchDelegate());
+              if (isMobileLocal) {
+                Navigator.pushNamed(context, '/search');
+              } else {
+                showSearch(context: context, delegate: ProductSearchDelegate());
+              }
             },
           ),
           IconButton(
@@ -116,8 +119,11 @@ class _PrintShackAboutPageState extends State<PrintShackAboutPage> {
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                    if (isMobileLocal) Navigator.pushNamed(ctx, '/search');
-                    else showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
