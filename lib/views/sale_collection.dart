@@ -81,77 +81,142 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
     return list;
   }
 
-  // minimal drawer so hamburger opens on mobile (keeps parity with Home)
-  Widget _drawerContent(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          color: const Color(0xFF4d2963),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Image.network(
-                'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                height: 36,
-                errorBuilder: (c, e, s) =>
-                    const SizedBox(width: 36, height: 36),
-              ),
-            ],
-          ),
+  // standardized drawer matching main.dart (supports showTopIcons for Drawer vs slide-down)
+  Widget _drawerContent(BuildContext context, {bool showTopIcons = true}) {
+    void doNav(String route) {
+      if (showTopIcons) Navigator.pop(context);
+      Navigator.pushNamed(context, route);
+    }
+
+    final children = <Widget>[];
+    if (showTopIcons) {
+      children.add(Container(
+        color: const Color(0xFF4d2963),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Image.network(
+              'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+              height: 36,
+              errorBuilder: (c, e, s) => const SizedBox(width: 36, height: 36),
+            ),
+            const Spacer(),
+            IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: const EdgeInsets.all(6),
+              icon: const Icon(Icons.search, color: Colors.white),
+              onPressed: () {
+                final isMobileLocal = MediaQuery.of(context).size.width < 700;
+                if (showTopIcons) Navigator.pop(context);
+                if (isMobileLocal)
+                  Navigator.pushNamed(context, '/search');
+                else
+                  showSearch(
+                      context: context, delegate: ProductSearchDelegate());
+              },
+            ),
+            IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: const EdgeInsets.all(6),
+              icon: const Icon(Icons.person_outline, color: Colors.white),
+              onPressed: () {
+                if (showTopIcons) Navigator.pop(context);
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: const EdgeInsets.all(6),
+              icon:
+                  const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+              onPressed: () {
+                if (showTopIcons) Navigator.pop(context);
+                Navigator.pushNamed(context, '/cart');
+              },
+            ),
+          ],
         ),
+      ));
+    }
+
+    children.addAll([
+      ListTile(
+          title: const Text('Home'),
+          onTap: () {
+            if (showTopIcons) Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+          }),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('Shop'), children: [
         ListTile(
-            title: const Text('Home'),
-            onTap: () =>
-                Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false)),
-        const Divider(height: 1),
-        ExpansionTile(title: const Text('Shop'), children: [
-          ListTile(
-              title: const Text('Clothing'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/clothing');
-              }),
-          ListTile(
-              title: const Text('Merchandise'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/merchandise');
-              }),
-          ListTile(
-              title: const Text('Essentials'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/essentials');
-              }),
-          ListTile(
-              title: const Text('Winter'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/winter');
-              }),
-          ListTile(
-              title: const Text('All'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/all');
-              }),
-        ]),
-        const Divider(height: 1),
+            title: const Text('Clothing'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/clothing');
+            }),
+        ListTile(
+            title: const Text('Merchandise'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/merchandise');
+            }),
+        ListTile(
+            title: const Text('Essentials'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/essentials');
+            }),
+        ListTile(
+            title: const Text('Winter'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/winter');
+            }),
+        ListTile(
+            title: const Text('All'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/all');
+            }),
+      ]),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('The Print Shack'), children: [
         ListTile(
             title: const Text('About'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/about');
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/printshack-about');
             }),
-      ],
-    );
-  }
+        ListTile(
+            title: const Text('Personalisation'),
+            onTap: () {
+              if (showTopIcons) Navigator.pop(context);
+              Navigator.pushNamed(context, '/printshack-personalisation');
+            }),
+      ]),
+      const Divider(height: 1),
+      ListTile(
+          title: const Text('SALE!',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          onTap: () {
+            if (showTopIcons) Navigator.pop(context);
+            Navigator.pushNamed(context, '/sale');
+          }),
+      const Divider(height: 1),
+      ListTile(
+          title: const Text('About'),
+          onTap: () {
+            if (showTopIcons) Navigator.pop(context);
+            Navigator.pushNamed(context, '/about');
+          }),
+    ]);
 
-  Widget _buildDrawer(BuildContext context) => Drawer(
-      child: SafeArea(
-          child: SingleChildScrollView(child: _drawerContent(context))));
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,143 +233,153 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
 
     return Scaffold(
       drawer: null,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomHeader(
-              isMobile: isMobile,
-              activeNav: activeNav,
-              hovering: _hovering,
-              onHover: _setHover,
-              onSetActive: _setActive,
-              placeholderCallback: _navigateToLogin,
-              toggleMobileMenu: _toggleMobileMenu,
-              mobileMenuOpen: _mobileMenuOpen,
-              navigateToHome: (_) => _navigateToHome(),
-              navigateToProduct: (_) => _navigateToProduct(),
-              navigateToAbout: (_) => _navigateToAbout(),
-              navigateToClothing: (ctx) =>
-                  Navigator.pushNamed(ctx, '/clothing'),
-              navigateToEssentials: (ctx) =>
-                  Navigator.pushNamed(ctx, '/essentials'),
-              navigateToMerchandise: (ctx) =>
-                  Navigator.pushNamed(ctx, '/merchandise'),
-              navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
-              navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
-              navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
-              navigateToSearch: (ctx) {
-                final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
-                if (isMobileLocal) {
-                  Navigator.pushNamed(ctx, '/search');
-                } else {
-                  showSearch(context: ctx, delegate: ProductSearchDelegate());
-                }
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.all(isMobile ? 12 : 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Heading
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    child: Text('Sale',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: isMobile ? 22 : 34,
-                            fontWeight: FontWeight.bold)),
-                  ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomHeader(
+                  isMobile: isMobile,
+                  activeNav: activeNav,
+                  hovering: _hovering,
+                  onHover: _setHover,
+                  onSetActive: _setActive,
+                  placeholderCallback: _navigateToLogin,
+                  toggleMobileMenu: _toggleMobileMenu,
+                  mobileMenuOpen: _mobileMenuOpen,
+                  navigateToHome: (ctx) =>
+                      Navigator.pushNamedAndRemoveUntil(ctx, '/', (r) => false),
+                  navigateToProduct: (ctx) =>
+                      Navigator.pushNamed(ctx, '/product'),
+                  navigateToAbout: (ctx) => Navigator.pushNamed(ctx, '/about'),
+                  navigateToClothing: (ctx) =>
+                      Navigator.pushNamed(ctx, '/clothing'),
+                  navigateToEssentials: (ctx) =>
+                      Navigator.pushNamed(ctx, '/essentials'),
+                  navigateToMerchandise: (ctx) =>
+                      Navigator.pushNamed(ctx, '/merchandise'),
+                  navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
+                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
+                  navigateToSearch: (ctx) {
+                    final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(
+                          context: ctx, delegate: ProductSearchDelegate());
+                    }
+                  },
+                  navigateToWinter: (ctx) =>
+                      Navigator.pushNamed(ctx, '/winter'),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(isMobile ? 12 : 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Heading
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: Text('Sale',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: isMobile ? 22 : 34,
+                                fontWeight: FontWeight.bold)),
+                      ),
 
-                  // Filter / Sort bar
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: Colors.grey.shade300)),
-                    ),
-                    child: Row(
-                      children: [
-                        // Filter
-                        Text('FILTER BY', style: labelStyle),
-                        SizedBox(width: 8),
-                        DropdownButton<String>(
-                          value: _filter,
-                          style: dropdownTextStyle,
-                          iconSize: dropdownIconSize,
-                          isDense: true,
-                          items: _filters
-                              .map((f) => DropdownMenuItem(
-                                  value: f,
-                                  child: Text(f, style: dropdownTextStyle)))
-                              .toList(),
-                          onChanged: (v) =>
-                              setState(() => _filter = v ?? _filter),
+                      // Filter / Sort bar
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 12),
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.grey.shade300)),
                         ),
-                        SizedBox(width: smallGap),
-                        Text('SORT BY', style: labelStyle),
-                        SizedBox(width: 8),
-                        DropdownButton<String>(
-                          value: _sort,
-                          style: dropdownTextStyle,
-                          iconSize: dropdownIconSize,
-                          isDense: true,
-                          items: _sorts
-                              .map((s) => DropdownMenuItem(
-                                  value: s,
-                                  child: Text(s, style: dropdownTextStyle)))
-                              .toList(),
-                          onChanged: (v) => setState(() => _sort = v ?? _sort),
-                        ),
-                        const Spacer(),
-                        isMobile
-                            ? const SizedBox.shrink()
-                            : Text('${products.length} products',
-                                style: const TextStyle(color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // Product grid (responsive)
-                  LayoutBuilder(builder: (context, constraints) {
-                    final totalWidth = constraints.maxWidth;
-                    const maxContentWidth = 1200.0;
-                    final contentWidth = totalWidth > maxContentWidth
-                        ? maxContentWidth
-                        : totalWidth;
-                    final spacing = isMobile ? 12.0 : 20.0;
-                    final runSpacing = isMobile ? 12.0 : 20.0;
-                    final columns = isMobile ? 1 : 3;
-                    final itemWidth =
-                        (contentWidth - (spacing * (columns - 1))) / columns;
-
-                    return Center(
-                      child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(maxWidth: maxContentWidth),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          spacing: spacing,
-                          runSpacing: runSpacing,
-                          children: products
-                              .map((p) => SizedBox(
-                                    width: itemWidth,
-                                    child: ProductTile(product: p),
-                                  ))
-                              .toList(),
+                        child: Row(
+                          children: [
+                            // Filter
+                            Text('FILTER BY', style: labelStyle),
+                            SizedBox(width: 8),
+                            DropdownButton<String>(
+                              value: _filter,
+                              style: dropdownTextStyle,
+                              iconSize: dropdownIconSize,
+                              isDense: true,
+                              items: _filters
+                                  .map((f) => DropdownMenuItem(
+                                      value: f,
+                                      child: Text(f, style: dropdownTextStyle)))
+                                  .toList(),
+                              onChanged: (v) =>
+                                  setState(() => _filter = v ?? _filter),
+                            ),
+                            SizedBox(width: smallGap),
+                            Text('SORT BY', style: labelStyle),
+                            SizedBox(width: 8),
+                            DropdownButton<String>(
+                              value: _sort,
+                              style: dropdownTextStyle,
+                              iconSize: dropdownIconSize,
+                              isDense: true,
+                              items: _sorts
+                                  .map((s) => DropdownMenuItem(
+                                      value: s,
+                                      child: Text(s, style: dropdownTextStyle)))
+                                  .toList(),
+                              onChanged: (v) =>
+                                  setState(() => _sort = v ?? _sort),
+                            ),
+                            const Spacer(),
+                            isMobile
+                                ? const SizedBox.shrink()
+                                : Text('${products.length} products',
+                                    style: const TextStyle(color: Colors.grey)),
+                          ],
                         ),
                       ),
-                    );
-                  }),
-                ],
-              ),
+
+                      const SizedBox(height: 18),
+
+                      // Product grid (responsive)
+                      LayoutBuilder(builder: (context, constraints) {
+                        final totalWidth = constraints.maxWidth;
+                        const maxContentWidth = 1200.0;
+                        final contentWidth = totalWidth > maxContentWidth
+                            ? maxContentWidth
+                            : totalWidth;
+                        final spacing = isMobile ? 12.0 : 20.0;
+                        final runSpacing = isMobile ? 12.0 : 20.0;
+                        final columns = isMobile ? 1 : 3;
+                        final itemWidth =
+                            (contentWidth - (spacing * (columns - 1))) /
+                                columns;
+
+                        return Center(
+                          child: ConstrainedBox(
+                            constraints:
+                                const BoxConstraints(maxWidth: maxContentWidth),
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              spacing: spacing,
+                              runSpacing: runSpacing,
+                              children: products
+                                  .map((p) => SizedBox(
+                                        width: itemWidth,
+                                        child: ProductTile(product: p),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                const CustomFooter(),
+              ],
             ),
-            const CustomFooter(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

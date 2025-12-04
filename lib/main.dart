@@ -124,15 +124,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ]),
       const Divider(height: 1),
       ExpansionTile(title: const Text('The Print Shack'), children: [
-        ListTile(title: const Text('About'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
-        ListTile(title: const Text('Personalisation'), onTap: () { Navigator.pop(context); placeholderCallbackForButtons(); }),
+        ListTile(title: const Text('About'), onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/printshack-about'); }),
+        ListTile(title: const Text('Personalisation'), onTap: () { Navigator.pop(context); navigateToPersonalisation(context); }),
       ]),
       const Divider(height: 1),
-      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); }),
+      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { setActive('SALE!'); Navigator.pop(context); navigateToSale(context); }),
       const Divider(height: 1),
       ListTile(title: const Text('About'), onTap: () { setActive('About'); Navigator.pop(context); navigateToAbout(context); }),
-      const Divider(height: 1),
-      ListTile(title: const Text('UPSU.net'), onTap: () { setActive('UPSU.net'); Navigator.pop(context); }),
     ]);
 
     // Column with mainAxisSize.min so it only takes required height; wrap with SingleChildScrollView where scrolling is needed.
@@ -188,6 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void navigateToEssentials(BuildContext context) {
     setActive('Essentials');
     Navigator.pushNamed(context, '/essentials');
+  }
+
+  void navigateToPersonalisation(BuildContext context) {
+    setActive('The Print Shack');
+    Navigator.pushNamed(context, '/printshack-personalisation');
   }
 
   Future<void> navigateToSearch(BuildContext context) async {

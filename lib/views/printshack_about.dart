@@ -24,16 +24,57 @@ class _PrintShackAboutPageState extends State<PrintShackAboutPage> {
       children.add(Container(
         color: const Color(0xFF4d2963),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Image.network('https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854', height: 36, errorBuilder: (c,e,s)=> const SizedBox(width:36,height:36)),
-          ],
-        ),
+        child: Row(children: [
+          Image.network('https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854', height: 36, errorBuilder: (c,e,s)=> const SizedBox(width:36,height:36)),
+          const Spacer(),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.all(6),
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              final isMobileLocal = MediaQuery.of(context).size.width < 700;
+              if (showTopIcons) Navigator.pop(context);
+              if (isMobileLocal) Navigator.pushNamed(context, '/search');
+              else showSearch(context: context, delegate: ProductSearchDelegate());
+            },
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.all(6),
+            icon: const Icon(Icons.person_outline, color: Colors.white),
+            onPressed: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/login'); },
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.all(6),
+            icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+            onPressed: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/cart'); },
+          ),
+        ]),
       ));
     }
+
     children.addAll([
-      ListTile(title: const Text('Home'), onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false)),
+      ListTile(title: const Text('Home'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false); }),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('Shop'), children: [
+        ListTile(title: const Text('Clothing'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/clothing'); }),
+        ListTile(title: const Text('Merchandise'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/merchandise'); }),
+        ListTile(title: const Text('Essentials'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/essentials'); }),
+        ListTile(title: const Text('Winter'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/winter'); }),
+        ListTile(title: const Text('All'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/all'); }),
+      ]),
+      const Divider(height: 1),
+      ExpansionTile(title: const Text('The Print Shack'), children: [
+        ListTile(title: const Text('About'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/printshack-about'); }),
+        ListTile(title: const Text('Personalisation'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/printshack-personalisation'); }),
+      ]),
+      const Divider(height: 1),
+      ListTile(title: const Text('SALE!', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/sale'); }),
+      const Divider(height: 1),
+      ListTile(title: const Text('About'), onTap: () { if (showTopIcons) Navigator.pop(context); Navigator.pushNamed(context, '/about'); }),
     ]);
+
     return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
   }
 
