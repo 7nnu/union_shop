@@ -30,9 +30,8 @@ class ProductTile extends StatelessWidget {
       );
     }
 
-    return GestureDetector(
-      onTap: onTap ?? () => Navigator.pushNamed(context, '/product', arguments: product),
-      // Use LayoutBuilder so we can allocate a fixed portion of the tile height to the image.
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/product', arguments: product),
       child: LayoutBuilder(
         builder: (context, constraints) {
           // Prefer tile width for a square image. If width is unbounded, fall back
