@@ -158,9 +158,9 @@ class _ProductPageState extends State<ProductPage> {
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Redesigned with a fresh chest logo, our essentials and merchandise are cosy and versatile. Replace this placeholder with real product copy.',
-                        style: TextStyle(color: Colors.black87),
+                      Text(
+                        'Rep Portsmouth University in STYLE! With the ${product.title} today!',
+                        style: const TextStyle(color: Colors.black87),
                       ),
                       const SizedBox(height: 24),
                       // Back to collection button
