@@ -51,12 +51,7 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, route),
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4d2963)),
-                    child: const Text('VIEW COLLECTION'),
-                  )
+                  // No button — tile itself is clickable (InkWell onTap)
                 ],
               ),
             )
@@ -125,29 +120,40 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
                       // grid of collection tiles — choose columns by available width so images sit side-by-side
                       LayoutBuilder(builder: (context, constraints) {
                         final totalWidth = constraints.maxWidth;
-                        final spacing = 16.0;
-                        // responsive columns: 1 on mobile, 3 on wide screens, 2 otherwise
+                        const spacing = 16.0;
+                        // responsive columns: 1 on small, 2 on medium, 3 on wide
                         final columns = totalWidth > 1100 ? 3 : (totalWidth > 700 ? 2 : 1);
-                        final itemWidth = (totalWidth - (spacing * (columns - 1))) / columns;
+
+                        final tiles = [
+                          {'title': 'Clothing', 'route': '/clothing', 'img': clothingImg},
+                          {'title': 'Merchandise', 'route': '/merchandise', 'img': merchImg},
+                          {'title': 'Essentials', 'route': '/essentials', 'img': essentialsImg},
+                          {'title': 'Winter', 'route': '/winter', 'img': winterImg},
+                          {'title': 'All Products', 'route': '/all', 'img': allImg},
+                          {'title': 'Sale', 'route': '/sale', 'img': saleImg},
+                        ];
 
                         return Center(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 1200),
-                            child: Wrap(
-                              spacing: spacing,
-                              runSpacing: spacing,
-                              children: [
-                                SizedBox(width: itemWidth, child: _buildTile('Clothing', '/clothing', clothingImg)),
-                                SizedBox(width: itemWidth, child: _buildTile('Merchandise', '/merchandise', merchImg)),
-                                SizedBox(width: itemWidth, child: _buildTile('Essentials', '/essentials', essentialsImg)),
-                                SizedBox(width: itemWidth, child: _buildTile('Winter', '/winter', winterImg)),
-                                SizedBox(width: itemWidth, child: _buildTile('All Products', '/all', allImg)),
-                                SizedBox(width: itemWidth, child: _buildTile('Sale', '/sale', saleImg)),
-                              ],
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: columns,
+                                crossAxisSpacing: spacing,
+                                mainAxisSpacing: spacing,
+                                childAspectRatio: 4 / 3,
+                              ),
+                              itemCount: tiles.length,
+                              itemBuilder: (ctx, i) {
+                                final t = tiles[i];
+                                return _buildTile(t['title'] as String, t['route'] as String, t['img'] as String);
+                              },
                             ),
                           ),
                         );
-                      }),
+                     }),
 
                       const SizedBox(height: 24),
                       const CustomFooter(),

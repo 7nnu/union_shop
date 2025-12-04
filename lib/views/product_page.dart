@@ -16,7 +16,7 @@ class _ProductPageState extends State<ProductPage> {
   final Map<String, bool> _hovering = {};
 
   // product option state
-  String _selectedColor = 'Baby Pink';
+  String _selectedColor = 'Black';
   String _selectedSize = 'L';
   int _quantity = 1;
 
