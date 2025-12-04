@@ -177,8 +177,10 @@ class _CartPageState extends State<CartPage> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // placeholder checkout
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Checkout placeholder')));
+                                  // snapshot current cart items and navigate to confirmation
+                                  final orderItems = cart.items.map((i) => i).toList();
+                                  Navigator.pushNamed(context, '/order-confirmation', arguments: orderItems);
+                                  cart.clear();
                                 },
                                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4d2963), padding: const EdgeInsets.symmetric(vertical: 16)),
                                 child: const Text('CHECKOUT', style: TextStyle(fontWeight: FontWeight.bold)),
