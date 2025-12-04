@@ -218,6 +218,9 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
         children: children);
   }
 
+  // provide a Drawer widget for the Scaffold (same as HomeScreen)
+  Widget _buildDrawer(BuildContext context) => Drawer(child: SafeArea(child: _drawerContent(context)));
+
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
@@ -232,7 +235,7 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
     final smallGap = isMobile ? 8.0 : 24.0;
 
     return Scaffold(
-      drawer: null,
+      drawer: _buildDrawer(context),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -379,6 +382,24 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
               ],
             ),
           ),
+
+          // slide-down mobile menu inserted under the navbar (matches main.dart)
+          if (_mobileMenuOpen)
+            Positioned(
+              top: isMobile ? 120.0 : 130.0,
+              left: 0,
+              right: 0,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - (isMobile ? 120.0 : 130.0)),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))],
+                ),
+                child: SingleChildScrollView(child: _drawerContent(context, showTopIcons: false)),
+              ),
+            ),
         ],
       ),
     );
