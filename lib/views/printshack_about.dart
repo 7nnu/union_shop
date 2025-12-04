@@ -91,6 +91,7 @@ class _PrintShackAboutPageState extends State<PrintShackAboutPage> {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

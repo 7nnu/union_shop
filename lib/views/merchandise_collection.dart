@@ -151,6 +151,7 @@ class _MerchandiseCollectionPageState extends State<MerchandiseCollectionPage> {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

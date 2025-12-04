@@ -146,6 +146,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

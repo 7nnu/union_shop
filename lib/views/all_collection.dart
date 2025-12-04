@@ -157,6 +157,7 @@ class _AllCollectionPageState extends State<AllCollectionPage> {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

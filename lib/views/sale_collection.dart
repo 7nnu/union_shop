@@ -236,6 +236,7 @@ class _SaleCollectionPageState extends State<SaleCollectionPage> {
 
     return Scaffold(
       drawer: _buildDrawer(context),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

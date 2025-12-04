@@ -78,6 +78,7 @@ class _PrintShackPersonalisationPageState extends State<PrintShackPersonalisatio
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

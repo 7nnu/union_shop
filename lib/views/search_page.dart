@@ -55,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: TextField(
           controller: _controller,

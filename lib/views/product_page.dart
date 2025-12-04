@@ -88,6 +88,7 @@ class _ProductPageState extends State<ProductPage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       drawer: null, // ensure header's in-tree slide-down is used
       body: Stack(
         children: [

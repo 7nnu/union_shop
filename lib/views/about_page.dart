@@ -111,6 +111,7 @@ class _AboutPageState extends State<AboutPage> {
     final remainingHeight = MediaQuery.of(context).size.height - headerHeight;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

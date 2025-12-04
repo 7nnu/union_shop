@@ -76,6 +76,7 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
     final saleImg = sampleSaleProducts.isNotEmpty ? sampleSaleProducts[0].imageUrl : 'assets/images/pink_beanie.png';
 
     return Scaffold(
+      backgroundColor: Colors.white,
       drawer: null,
       body: Stack(
         children: [

@@ -20,6 +20,7 @@ class OrderConfirmationPage extends StatelessWidget {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

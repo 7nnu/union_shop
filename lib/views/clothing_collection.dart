@@ -150,6 +150,7 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
     // Render header, collection content and footer with slide-down mobile menu
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // main content

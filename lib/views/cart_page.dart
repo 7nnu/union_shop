@@ -102,6 +102,7 @@ class _CartPageState extends State<CartPage> {
 
     return Scaffold(
       drawer: null,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(
