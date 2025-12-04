@@ -20,6 +20,12 @@ class _ProductPageState extends State<ProductPage> {
   String _selectedSize = 'L';
   int _quantity = 1;
 
+  // helper: determine if product is merchandise (tote/mug/notebook/pen/lanyard)
+  bool _isMerchandise(Product p) {
+    final t = p.title.toLowerCase();
+    return t.contains('tote') || t.contains('mug') || t.contains('notebook') || t.contains('pen') || t.contains('lanyard');
+  }
+
   // determine which collection route a product belongs to
   String _collectionRouteForProduct(Product p) {
     final t = p.title.toLowerCase();
@@ -222,9 +228,10 @@ class _ProductPageState extends State<ProductPage> {
         const Text('Tax included.', style: TextStyle(color: Colors.grey)),
         const SizedBox(height: 18),
 
-        // Option selectors: Color / Size / Quantity
+        // Option selectors: Color / Size (optional) / Quantity
         Row(
           children: [
+            // Color selector (shared for all products)
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,30 +240,37 @@ class _ProductPageState extends State<ProductPage> {
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     value: _selectedColor,
-                    items: ['Baby Pink', 'Stone Blue'].map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                    items: ['Black', 'White', 'Purple', 'Grey', 'Navy'].map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                     onChanged: (v) => setState(() => _selectedColor = v ?? _selectedColor),
                     decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), border: OutlineInputBorder()),
                   ),
                 ],
               ),
             ),
+
             const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Size', style: TextStyle(color: Colors.grey, fontSize: 13)),
-                  const SizedBox(height: 6),
-                  DropdownButtonFormField<String>(
-                    value: _selectedSize,
-                    items: ['S', 'M', 'L', 'XL'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-                    onChanged: (v) => setState(() => _selectedSize = v ?? _selectedSize),
-                    decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), border: OutlineInputBorder()),
-                  ),
-                ],
+
+            // Size selector: only show for non-merchandise (clothing/essentials/winter)
+            if (!_isMerchandise(product)) ...[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Size', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                    const SizedBox(height: 6),
+                    DropdownButtonFormField<String>(
+                      value: _selectedSize,
+                      items: ['S', 'M', 'L', 'XL'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                      onChanged: (v) => setState(() => _selectedSize = v ?? _selectedSize),
+                      decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), border: OutlineInputBorder()),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
+              const SizedBox(width: 12),
+            ],
+
+            // Quantity
             SizedBox(
               width: 84,
               child: Column(
