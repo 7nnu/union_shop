@@ -178,12 +178,17 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, '/essentials');
   }
 
-  void navigateToSearch(BuildContext context) {
+  Future<void> navigateToSearch(BuildContext context) async {
     final isMobile = MediaQuery.of(context).size.width < 700;
     if (isMobile) {
       Navigator.pushNamed(context, '/search');
-    } else {
-      showSearch(context: context, delegate: ProductSearchDelegate());
+      return;
+    }
+
+    // Desktop: show SearchDelegate and navigate to product page if a product is selected.
+    final result = await showSearch<Product?>(context: context, delegate: ProductSearchDelegate());
+    if (result != null) {
+      Navigator.pushNamed(context, '/product', arguments: result);
     }
   }
 
