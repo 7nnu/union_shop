@@ -3,6 +3,7 @@ import 'package:union_shop/models/product.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
 import 'package:union_shop/views/search_page.dart';
+import 'package:union_shop/models/cart.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -299,7 +300,11 @@ class _ProductPageState extends State<ProductPage> {
           width: double.infinity,
           child: OutlinedButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added ${product.title} x$_quantity to cart (placeholder)')));
+              final size = _isMerchandise(product) ? null : _selectedSize;
+              Cart().addProduct(product, color: _selectedColor, size: size, quantity: _quantity);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Added ${product.title} x$_quantity (${_selectedColor}${size != null ? ', $size' : ''}) to cart')),
+              );
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: const Color(0xFF4d2963)),

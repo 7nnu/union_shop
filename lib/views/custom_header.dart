@@ -98,7 +98,7 @@ class CustomHeader extends StatelessWidget {
                         ),
                         IconButton(
                           icon: const Icon(Icons.shopping_bag_outlined, size: 20, color: Colors.black),
-                          onPressed: placeholderCallback,
+                          onPressed: () => Navigator.pushNamed(context, '/cart'),
                         ),
                         // show menu or X depending on open state, slide-down from beneath header
                         IconButton(
@@ -326,7 +326,7 @@ class CustomHeader extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.shopping_bag_outlined, size: 24, color: Colors.black),
-                            onPressed: placeholderCallback,
+                            onPressed: () => Navigator.pushNamed(context, '/cart'),
                           ),
                           // no menu icon here on desktop
                         ],

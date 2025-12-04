@@ -15,6 +15,7 @@ import 'package:union_shop/views/merchandise_collection.dart';
 import 'package:union_shop/views/all_collection.dart';
 import 'package:union_shop/views/sale_collection.dart';
 import 'package:union_shop/views/collections_overview.dart';
+import 'package:union_shop/views/cart_page.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -37,6 +38,7 @@ class UnionShopApp extends StatelessWidget {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
         '/login': (context) => const LoginPage(),
+        '/cart': (context) => const CartPage(),
         '/clothing': (context) => const ClothingCollectionPage(),
         '/essentials': (context) => const EssentialsCollectionPage(),
         '/merchandise': (context) => const MerchandiseCollectionPage(),
