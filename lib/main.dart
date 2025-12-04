@@ -14,6 +14,7 @@ import 'package:union_shop/views/winter_collection.dart';
 import 'package:union_shop/views/merchandise_collection.dart';
 import 'package:union_shop/views/all_collection.dart';
 import 'package:union_shop/views/sale_collection.dart';
+import 'package:union_shop/views/collections_overview.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -42,6 +43,7 @@ class UnionShopApp extends StatelessWidget {
         '/sale': (context) => const SaleCollectionPage(),
         '/winter': (context) => const WinterCollectionPage(),
         '/all': (context) => const AllCollectionPage(),
+        '/collections': (context) => const CollectionsOverviewPage(),
         '/search': (context) => const SearchPage(),
       },
     );
@@ -110,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); navigateToMerchandise(context); }),
         ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); navigateToEssentials(context); }),
         ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); navigateToWinter(context); }),
-        ListTile(title: const Text('Sale'), onTap: () { Navigator.pop(context); navigateToSale(context); }),
         ListTile(title: const Text('All'), onTap: () { Navigator.pop(context); navigateToAll(context); }),
       ]),
       const Divider(height: 1),
@@ -459,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
 
-                // "View All Collections" CTA
+                // "View All Collections" CTA -> opens overview page
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: isMobile ? 18.0 : 28.0),
                   child: Center(
@@ -468,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => navigateToClothing(context),
+                          onPressed: () => Navigator.pushNamed(context, '/collections'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4d2963),
                             foregroundColor: Colors.white,
