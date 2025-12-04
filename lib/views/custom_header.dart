@@ -15,6 +15,7 @@ class CustomHeader extends StatelessWidget {
   final void Function(BuildContext) navigateToClothing;
   final void Function(BuildContext) navigateToEssentials;
   final void Function(BuildContext) navigateToMerchandise;
+  final void Function(BuildContext) navigateToSale;
   final void Function(BuildContext) navigateToSearch;
   final void Function(BuildContext) navigateToWinter;
   final void Function(BuildContext) navigateToAll;
@@ -35,9 +36,10 @@ class CustomHeader extends StatelessWidget {
     required this.navigateToClothing,
     required this.navigateToEssentials,
     required this.navigateToMerchandise,
+    required this.navigateToSale,
+    required this.navigateToAll,
     required this.navigateToSearch,
     required this.navigateToWinter,
-    required this.navigateToAll,
   });
 
   @override
@@ -167,6 +169,8 @@ class CustomHeader extends StatelessWidget {
                                         navigateToEssentials(context);
                                       } else if (v == 'winter') {
                                         navigateToWinter(context);
+                                      } else if (v == 'sale') {
+                                        navigateToSale(context);
                                       } else if (v == 'all') {
                                         navigateToAll(context);
                                       } else {
@@ -178,6 +182,7 @@ class CustomHeader extends StatelessWidget {
                                       PopupMenuItem(value: 'merchandise', child: Text('Merchandise')),
                                       PopupMenuItem(value: 'essentials', child:Text('Essentials')),
                                       PopupMenuItem(value: 'winter', child: Text('Winter')),
+                                      PopupMenuItem(value: 'sale', child: Text('Sale')),
                                       PopupMenuItem(value: 'all', child: Text('All Products')),
                                     ],
                                     child: Padding(
@@ -244,7 +249,10 @@ class CustomHeader extends StatelessWidget {
                                 child: SizedBox(
                                   height: 36,
                                   child: TextButton(
-                                    onPressed: () => onSetActive('SALE!'),
+                                    onPressed: () {
+                                      onSetActive('SALE!');
+                                      navigateToSale(context);
+                                    },
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(horizontal: 8),
                                       minimumSize: const Size(0, 36),

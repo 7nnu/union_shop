@@ -153,7 +153,7 @@ class _WinterCollectionPageState extends State<WinterCollectionPage> {
                     } else {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
-                  },
+                  }, navigateToSale: (BuildContext p1) {  },
                 ),
 
                 Padding(

@@ -147,7 +147,7 @@ class _EssentialsCollectionPageState extends State<EssentialsCollectionPage> {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
                   },
-                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'), navigateToMerchandise: (BuildContext p1) {  }, navigateToWinter: (BuildContext p1) {  },
+                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'), navigateToMerchandise: (BuildContext p1) {  }, navigateToWinter: (BuildContext p1) {  }, navigateToSale: (BuildContext p1) {  }
                 ),
 
                 Padding(

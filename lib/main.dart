@@ -13,6 +13,7 @@ import 'package:union_shop/views/search_page.dart';
 import 'package:union_shop/views/winter_collection.dart';
 import 'package:union_shop/views/merchandise_collection.dart';
 import 'package:union_shop/views/all_collection.dart';
+import 'package:union_shop/views/sale_collection.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -38,6 +39,7 @@ class UnionShopApp extends StatelessWidget {
         '/clothing': (context) => const ClothingCollectionPage(),
         '/essentials': (context) => const EssentialsCollectionPage(),
         '/merchandise': (context) => const MerchandiseCollectionPage(),
+        '/sale': (context) => const SaleCollectionPage(),
         '/winter': (context) => const WinterCollectionPage(),
         '/all': (context) => const AllCollectionPage(),
         '/search': (context) => const SearchPage(),
@@ -108,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ListTile(title: const Text('Merchandise'), onTap: () { Navigator.pop(context); navigateToMerchandise(context); }),
         ListTile(title: const Text('Essentials'), onTap: () { Navigator.pop(context); navigateToEssentials(context); }),
         ListTile(title: const Text('Winter'), onTap: () { Navigator.pop(context); navigateToWinter(context); }),
+        ListTile(title: const Text('Sale'), onTap: () { Navigator.pop(context); navigateToSale(context); }),
         ListTile(title: const Text('All'), onTap: () { Navigator.pop(context); navigateToAll(context); }),
       ]),
       const Divider(height: 1),
@@ -207,6 +210,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, '/all');
   }
 
+  void navigateToSale(BuildContext context) {
+    setActive('SALE!');
+    Navigator.pushNamed(context, '/sale');
+  }
+
   Widget _buildDrawer(BuildContext context) {
     // keep for compatibility (side-drawer) but not used when mobile uses slide-down
     return Drawer(child: SafeArea(child: _drawerContent(context)));
@@ -248,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToClothing: navigateToClothing,
                   navigateToEssentials: navigateToEssentials,
                   navigateToMerchandise: navigateToMerchandise,
+                  navigateToSale: navigateToSale,
                   navigateToSearch: navigateToSearch,
                   navigateToWinter: navigateToWinter,
                   navigateToAll: navigateToAll,

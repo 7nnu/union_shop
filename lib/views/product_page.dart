@@ -108,7 +108,7 @@ class _ProductPageState extends State<ProductPage> {
                     else showSearch(context: ctx, delegate: ProductSearchDelegate());
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
-                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
+                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'), navigateToSale: (BuildContext p1) {  },
                 ),
 
                 Padding(

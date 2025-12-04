@@ -173,7 +173,8 @@ class _ClothingCollectionPageState extends State<ClothingCollectionPage> {
                     }
                   },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
-                  navigateToMerchandise: (BuildContext p1) {  },
+                  navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
+                  navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
                 ),
 
                 // page content

@@ -154,7 +154,7 @@ class _MerchandiseCollectionPageState extends State<MerchandiseCollectionPage> {
                     } else {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
-                  },
+                  }, navigateToSale: (BuildContext p1) {  },
                 ),
 
                 Padding(

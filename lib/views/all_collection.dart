@@ -168,7 +168,7 @@ class _AllCollectionPageState extends State<AllCollectionPage> {
                     } else {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
-                  },
+                  }, navigateToSale: (BuildContext p1) {  },
                 ),
 
                 Padding(
