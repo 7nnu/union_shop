@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/views/search_page.dart';
 
-class CustomHeader extends StatelessWidget {
+
+class CustomHeader extends StatefulWidget {
   final bool isMobile;
   final String activeNav;
   final Map<String, bool> hovering;
@@ -43,7 +45,33 @@ class CustomHeader extends StatelessWidget {
   });
 
   @override
+  State<CustomHeader> createState() => _CustomHeaderState();
+}
+
+class _CustomHeaderState extends State<CustomHeader> {
+  // add: inline search controller & focus (used only for desktop inline field)
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocus.addListener(() {
+      // if user blurs the field we keep it simple — don't auto-close here so UI remains stable.
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isMobile = widget.isMobile;
+
     // shorter desktop header
     final headerHeight = isMobile ? 120.0 : 130.0;
 
@@ -80,7 +108,7 @@ class CustomHeader extends StatelessWidget {
                     return Row(
                       children: [
                         GestureDetector(
-                          onTap: () => navigateToHome(context),
+                          onTap: () => widget.navigateToHome(context),
                           child: Image.network(
                             'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
                             height: 35,
@@ -90,11 +118,11 @@ class CustomHeader extends StatelessWidget {
                         const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.search, size: 20, color: Colors.black),
-                          onPressed: () => navigateToSearch(context),
+                          onPressed: () => widget.navigateToSearch(context),
                         ),
                         IconButton(
                           icon: const Icon(Icons.person_outline, size: 20, color: Colors.black),
-                          onPressed: placeholderCallback,
+                          onPressed: widget.placeholderCallback,
                         ),
                         IconButton(
                           icon: const Icon(Icons.shopping_bag_outlined, size: 20, color: Colors.black),
@@ -102,9 +130,9 @@ class CustomHeader extends StatelessWidget {
                         ),
                         // show menu or X depending on open state, slide-down from beneath header
                         IconButton(
-                          icon: Icon(mobileMenuOpen ? Icons.close : Icons.menu, color: Colors.black),
+                          icon: Icon(widget.mobileMenuOpen ? Icons.close : Icons.menu, color: Colors.black),
                           // always toggle the in-tree slide-down menu (do not open the Scaffold drawer)
-                          onPressed: toggleMobileMenu,
+                          onPressed: widget.toggleMobileMenu,
                         ),
                       ],
                     );
@@ -114,7 +142,7 @@ class CustomHeader extends StatelessWidget {
                   return Row(
                     children: [
                       GestureDetector(
-                        onTap: () => navigateToHome(context),
+                        onTap: () => widget.navigateToHome(context),
                         child: Image.network(
                           'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
                           height: 35,
@@ -130,12 +158,12 @@ class CustomHeader extends StatelessWidget {
                             final navItems = <Widget>[
                               // Home (hover + active)
                               MouseRegion(
-                                onEnter: (_) => onHover('Home', true),
-                                onExit: (_) => onHover('Home', false),
+                                onEnter: (_) => widget.onHover('Home', true),
+                                onExit: (_) => widget.onHover('Home', false),
                                 child: SizedBox(
                                   height: 36,
                                   child: TextButton(
-                                    onPressed: () => navigateToHome(context),
+                                    onPressed: () => widget.navigateToHome(context),
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(horizontal: 8),
                                       minimumSize: const Size(0, 36),
@@ -144,7 +172,7 @@ class CustomHeader extends StatelessWidget {
                                     child: Text(
                                       'Home',
                                       style: TextStyle(
-                                        decoration: (activeNav == 'Home' || (hovering['Home'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
+                                        decoration: (widget.activeNav == 'Home' || (widget.hovering['Home'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -154,25 +182,25 @@ class CustomHeader extends StatelessWidget {
 
                               // Shop (popup)
                               MouseRegion(
-                                onEnter: (_) => onHover('Shop', true),
-                                onExit: (_) => onHover('Shop', false),
+                                onEnter: (_) => widget.onHover('Shop', true),
+                                onExit: (_) => widget.onHover('Shop', false),
                                 child: SizedBox(
                                   height: 36,
                                   child: PopupMenuButton<String>(
                                     onSelected: (v) {
-                                      onSetActive('Shop');
+                                      widget.onSetActive('Shop');
                                       if (v == 'clothing') {
-                                        navigateToClothing(context);
+                                        widget.navigateToClothing(context);
                                       } else if (v == 'merchandise') {
-                                        navigateToMerchandise(context);
+                                        widget.navigateToMerchandise(context);
                                       } else if (v == 'essentials') {
-                                        navigateToEssentials(context);
+                                        widget.navigateToEssentials(context);
                                       } else if (v == 'winter') {
-                                        navigateToWinter(context);
+                                        widget.navigateToWinter(context);
                                       } else if (v == 'all') {
-                                        navigateToAll(context);
+                                        widget.navigateToAll(context);
                                       } else {
-                                        placeholderCallback();
+                                        widget.placeholderCallback();
                                       }
                                     },
                                     itemBuilder: (_) => const [
@@ -190,7 +218,7 @@ class CustomHeader extends StatelessWidget {
                                           Text(
                                             'Shop',
                                             style: TextStyle(
-                                              decoration: (activeNav == 'Shop' || (hovering['Shop'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
+                                              decoration: (widget.activeNav == 'Shop' || (widget.hovering['Shop'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -205,19 +233,19 @@ class CustomHeader extends StatelessWidget {
 
                               // The Print Shack (popup)
                               MouseRegion(
-                                onEnter: (_) => onHover('The Print Shack', true),
-                                onExit: (_) => onHover('The Print Shack', false),
+                                onEnter: (_) => widget.onHover('The Print Shack', true),
+                                onExit: (_) => widget.onHover('The Print Shack', false),
                                 child: SizedBox(
                                   height: 36,
                                   child: PopupMenuButton<String>(
                                     onSelected: (v) {
-                                      onSetActive('The Print Shack');
+                                      widget.onSetActive('The Print Shack');
                                       if (v == 'about') {
                                         Navigator.pushNamed(context, '/printshack-about');
                                       } else if (v == 'personalisation') {
                                         Navigator.pushNamed(context, '/printshack-personalisation');
                                       } else {
-                                        placeholderCallback();
+                                        widget.placeholderCallback();
                                       }
                                     },
                                     itemBuilder: (_) => const [
@@ -232,7 +260,7 @@ class CustomHeader extends StatelessWidget {
                                           Text(
                                             'The Print Shack',
                                             style: TextStyle(
-                                              decoration: (activeNav == 'The Print Shack' || (hovering['The Print Shack'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
+                                              decoration: (widget.activeNav == 'The Print Shack' || (widget.hovering['The Print Shack'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -247,14 +275,14 @@ class CustomHeader extends StatelessWidget {
 
                               // SALE!
                               MouseRegion(
-                                onEnter: (_) => onHover('SALE!', true),
-                                onExit: (_) => onHover('SALE!', false),
+                                onEnter: (_) => widget.onHover('SALE!', true),
+                                onExit: (_) => widget.onHover('SALE!', false),
                                 child: SizedBox(
                                   height: 36,
                                   child: TextButton(
                                     onPressed: () {
-                                      onSetActive('SALE!');
-                                      navigateToSale(context);
+                                      widget.onSetActive('SALE!');
+                                      widget.navigateToSale(context);
                                     },
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -265,7 +293,7 @@ class CustomHeader extends StatelessWidget {
                                       'SALE!',
                                       style: TextStyle(
                                         color: Colors.black,
-                                        decoration: (activeNav == 'SALE!' || (hovering['SALE!'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
+                                        decoration: (widget.activeNav == 'SALE!' || (widget.hovering['SALE!'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                       ),
                                     ),
                                   ),
@@ -274,12 +302,12 @@ class CustomHeader extends StatelessWidget {
 
                               // About
                               MouseRegion(
-                                onEnter: (_) => onHover('About', true),
-                                onExit: (_) => onHover('About', false),
+                                onEnter: (_) => widget.onHover('About', true),
+                                onExit: (_) => widget.onHover('About', false),
                                 child: SizedBox(
                                   height: 36,
                                   child: TextButton(
-                                    onPressed: () => navigateToAbout(context),
+                                    onPressed: () => widget.navigateToAbout(context),
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(horizontal: 8),
                                       minimumSize: const Size(0, 36),
@@ -288,7 +316,7 @@ class CustomHeader extends StatelessWidget {
                                     child: Text(
                                       'About',
                                       style: TextStyle(
-                                        decoration: (activeNav == 'About' || (hovering['About'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
+                                        decoration: (widget.activeNav == 'About' || (widget.hovering['About'] ?? false)) ? TextDecoration.underline : TextDecoration.none,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -322,13 +350,49 @@ class CustomHeader extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.search, size: 24, color: Colors.black),
-                            onPressed: () => navigateToSearch(context),
-                          ),
+                          // --- CHANGED: replace only the search icon with an inline field on desktop ---
+                          if (!isMobile)
+                            // inline search field that visually extends the appbar (matches screenshot)
+                            Container(
+                              width: 260,
+                              margin: const EdgeInsets.only(left: 12),
+                              child: TextField(
+                                controller: _searchController,
+                                focusNode: _searchFocus,
+                                textInputAction: TextInputAction.search,
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.search),
+                                    onPressed: () {
+                                      // navigate to the SearchPage and pass the current query so SearchPage
+                                      // can immediately show the results view (desktop style)
+                                      final q = _searchController.text.trim();
+                                      Navigator.pushNamed(context, '/search', arguments: q);
+                                    },
+                                  ),
+                                ),
+                                onSubmitted: (_) {
+                                  final q = _searchController.text.trim();
+                                  Navigator.pushNamed(context, '/search', arguments: q);
+                                },
+                              ),
+                            )
+                          else
+                            // mobile: keep the icon behaviour unchanged (navigates to /search)
+                            IconButton(
+                              icon: const Icon(Icons.search),
+                              onPressed: () {
+                                widget.navigateToSearch?.call(context);
+                              },
+                            ),
+
                           IconButton(
                             icon: const Icon(Icons.person_outline, size: 24, color: Colors.black),
-                            onPressed: placeholderCallback,
+                            onPressed: widget.placeholderCallback,
                           ),
                           IconButton(
                             icon: const Icon(Icons.shopping_bag_outlined, size: 24, color: Colors.black),

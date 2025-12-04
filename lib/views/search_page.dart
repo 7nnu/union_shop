@@ -26,6 +26,20 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // If this page was pushed with an initial query (Navigator.pushNamed(..., arguments: 'query')),
+    // pick it up after the first frame and update the controller/results so the page shows results.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+      if (arg is String && arg.trim().isNotEmpty) {
+        _controller.text = arg;
+        _update(arg);
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
