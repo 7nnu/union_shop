@@ -69,7 +69,14 @@ class OrderConfirmationPage extends StatelessWidget {
                             return ListTile(
                               leading: SizedBox(width: 56, height: 56, child: Image.asset(it.product.imageUrl, fit: BoxFit.cover)),
                               title: Text(it.product.title),
-                              subtitle: Text('Color: ${it.color}${it.size != null ? ' · Size: ${it.size}' : ''}'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Color: ${it.color}${it.size != null ? ' · Size: ${it.size}' : ''}'),
+                                  if (it.personalisationLine1 != null && it.personalisationLine1!.isNotEmpty) Text('Line 1: ${it.personalisationLine1}'),
+                                  if (it.personalisationLine2 != null && it.personalisationLine2!.isNotEmpty) Text('Line 2: ${it.personalisationLine2}'),
+                                ],
+                              ),
                               trailing: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

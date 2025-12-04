@@ -18,6 +18,7 @@ import 'package:union_shop/views/order_confirmation.dart';
 import 'package:union_shop/views/collections_overview.dart';
 import 'package:union_shop/views/cart_page.dart';
 import 'package:union_shop/views/printshack_about.dart';
+import 'package:union_shop/views/printshack_personalisation.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -39,6 +40,7 @@ class UnionShopApp extends StatelessWidget {
       routes: {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
+        '/printshack-personalisation': (context) => const PrintShackPersonalisationPage(),
         '/login': (context) => const LoginPage(),
         '/printshack-about': (context) => const PrintShackAboutPage(),
         '/order-confirmation': (context) => const OrderConfirmationPage(),

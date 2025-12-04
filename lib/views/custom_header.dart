@@ -214,6 +214,8 @@ class CustomHeader extends StatelessWidget {
                                       onSetActive('The Print Shack');
                                       if (v == 'about') {
                                         Navigator.pushNamed(context, '/printshack-about');
+                                      } else if (v == 'personalisation') {
+                                        Navigator.pushNamed(context, '/printshack-personalisation');
                                       } else {
                                         placeholderCallback();
                                       }

@@ -6,6 +6,8 @@ class CartItem {
   final Product product;
   final String color;
   final String? size; // nullable for merchandise
+  final String? personalisationLine1;
+  final String? personalisationLine2;
   int quantity;
 
   CartItem({
@@ -13,6 +15,8 @@ class CartItem {
     required this.product,
     required this.color,
     this.size,
+    this.personalisationLine1,
+    this.personalisationLine2,
     required this.quantity,
   });
 
@@ -37,10 +41,17 @@ class Cart extends ChangeNotifier {
 
   double get subtotal => _items.values.fold(0.0, (sum, e) => sum + e.totalPrice);
 
-  // Adds product; if same product+color+size exists, increments quantity
-  void addProduct(Product product, {required String color, String? size, int quantity = 1}) {
-    // key composed of product title + color + size for simple dedupe
-    final key = '${product.title}||$color||${size ?? ''}';
+  // Adds product; if same product+color+size+personalisation exists, increments quantity
+  void addProduct(
+    Product product, {
+    required String color,
+    String? size,
+    int quantity = 1,
+    String? personalisationLine1,
+    String? personalisationLine2,
+  }) {
+    // key composed of product title + color + size + personalisation lines for simple dedupe
+    final key = '${product.title}||$color||${size ?? ''}||${personalisationLine1 ?? ''}||${personalisationLine2 ?? ''}';
     if (_items.containsKey(key)) {
       _items[key]!.quantity += quantity;
     } else {
@@ -49,6 +60,8 @@ class Cart extends ChangeNotifier {
         product: product,
         color: color,
         size: size,
+        personalisationLine1: personalisationLine1,
+        personalisationLine2: personalisationLine2,
         quantity: quantity,
       );
     }

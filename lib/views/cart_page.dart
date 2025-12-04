@@ -124,6 +124,15 @@ class _CartPageState extends State<CartPage> {
                                             Text(item.product.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                                             const SizedBox(height: 6),
                                             Text('Color: ${item.color}', style: const TextStyle(color: Colors.grey)),
+                                            // show personalisation lines if present
+                                            if (item.personalisationLine1 != null && item.personalisationLine1!.isNotEmpty) ...[
+                                              const SizedBox(height: 4),
+                                              Text('Line 1: ${item.personalisationLine1}', style: const TextStyle(color: Colors.grey)),
+                                            ],
+                                            if (item.personalisationLine2 != null && item.personalisationLine2!.isNotEmpty) ...[
+                                              const SizedBox(height: 4),
+                                              Text('Line 2: ${item.personalisationLine2}', style: const TextStyle(color: Colors.grey)),
+                                            ],
                                             if (item.size != null) const SizedBox(height: 4),
                                             if (item.size != null) Text('Size: ${item.size}', style: const TextStyle(color: Colors.grey)),
                                             const SizedBox(height: 8),
