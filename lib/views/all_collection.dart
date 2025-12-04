@@ -153,13 +153,13 @@ class _AllCollectionPageState extends State<AllCollectionPage> {
                   placeholderCallback: _navigateToLogin,
                   toggleMobileMenu: _toggleMobileMenu,
                   mobileMenuOpen: _mobileMenuOpen,
-                  navigateToHome: (_) => _navigateToHome(),
-                  navigateToProduct: (_) => _navigateToProduct(),
-                  navigateToAbout: (_) => _navigateToAbout(),
+                  navigateToHome: (ctx) => Navigator.pushNamedAndRemoveUntil(ctx, '/', (r) => false),
+                  navigateToProduct: (ctx) => Navigator.pushNamed(ctx, '/product'),
+                  navigateToAbout: (ctx) => Navigator.pushNamed(ctx, '/about'),
                   navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
                   navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
                   navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
-                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
+                  navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
                   navigateToSearch: (ctx) {
                     final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
@@ -168,7 +168,8 @@ class _AllCollectionPageState extends State<AllCollectionPage> {
                     } else {
                       showSearch(context: ctx, delegate: ProductSearchDelegate());
                     }
-                  }, navigateToSale: (BuildContext p1) {  },
+                  },
+                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
 
                 Padding(

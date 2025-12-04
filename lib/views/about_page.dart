@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
+import 'package:union_shop/views/search_page.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -124,9 +125,23 @@ class _AboutPageState extends State<AboutPage> {
                   placeholderCallback: placeholderCallbackForButtons,
                   toggleMobileMenu: _toggleMobileMenu,
                   mobileMenuOpen: _mobileMenuOpen,
-                  navigateToHome: navigateToHome,
-                  navigateToProduct: navigateToProduct,
-                  navigateToAbout: navigateToAbout, navigateToClothing: (BuildContext p1) {  }, navigateToEssentials: (BuildContext p1) {  }, navigateToSearch: (BuildContext p1) {  }, navigateToWinter: (BuildContext p1) {  }, navigateToMerchandise: (BuildContext p1) {  }, navigateToAll: (BuildContext p1) {  }, navigateToSale: (BuildContext p1) {  },
+                  navigateToHome: (ctx) => Navigator.pushNamedAndRemoveUntil(ctx, '/', (r) => false),
+                  navigateToProduct: (ctx) => Navigator.pushNamed(ctx, '/product'),
+                  navigateToAbout: (ctx) => Navigator.pushNamed(ctx, '/about'),
+                  navigateToClothing: (ctx) => Navigator.pushNamed(ctx, '/clothing'),
+                  navigateToEssentials: (ctx) => Navigator.pushNamed(ctx, '/essentials'),
+                  navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
+                  navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
+                  navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
+                  navigateToSearch: (ctx) {
+                    final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
+                  },
+                  navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
 
                 // Centered, larger About content

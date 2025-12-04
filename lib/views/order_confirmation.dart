@@ -29,7 +29,7 @@ class OrderConfirmationPage extends StatelessWidget {
                   isMobile: isMobile,
                   activeNav: 'Order',
                   hovering: const {},
-                  onHover: (a, b) {},
+                  onHover: (name, val) {},
                   onSetActive: (s) {},
                   placeholderCallback: () => Navigator.pushNamed(context, '/login'),
                   toggleMobileMenu: () {},

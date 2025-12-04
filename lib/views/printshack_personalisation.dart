@@ -3,6 +3,7 @@ import 'package:union_shop/models/product.dart';
 import 'package:union_shop/models/cart.dart';
 import 'package:union_shop/views/custom_header.dart';
 import 'package:union_shop/views/custom_footer.dart';
+import 'package:union_shop/views/search_page.dart';
 
 class PrintShackPersonalisationPage extends StatefulWidget {
   const PrintShackPersonalisationPage({super.key});
@@ -99,7 +100,14 @@ class _PrintShackPersonalisationPageState extends State<PrintShackPersonalisatio
                   navigateToMerchandise: (ctx) => Navigator.pushNamed(ctx, '/merchandise'),
                   navigateToSale: (ctx) => Navigator.pushNamed(ctx, '/sale'),
                   navigateToAll: (ctx) => Navigator.pushNamed(ctx, '/all'),
-                  navigateToSearch: (ctx) {},
+                  navigateToSearch: (ctx) {
+                    final isMobileLocal = MediaQuery.of(ctx).size.width < 700;
+                    if (isMobileLocal) {
+                      Navigator.pushNamed(ctx, '/search');
+                    } else {
+                      showSearch(context: ctx, delegate: ProductSearchDelegate());
+                    }
+                  },
                   navigateToWinter: (ctx) => Navigator.pushNamed(ctx, '/winter'),
                 ),
 
