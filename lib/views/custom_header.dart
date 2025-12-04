@@ -169,8 +169,6 @@ class CustomHeader extends StatelessWidget {
                                         navigateToEssentials(context);
                                       } else if (v == 'winter') {
                                         navigateToWinter(context);
-                                      } else if (v == 'sale') {
-                                        navigateToSale(context);
                                       } else if (v == 'all') {
                                         navigateToAll(context);
                                       } else {
@@ -182,7 +180,6 @@ class CustomHeader extends StatelessWidget {
                                       PopupMenuItem(value: 'merchandise', child: Text('Merchandise')),
                                       PopupMenuItem(value: 'essentials', child:Text('Essentials')),
                                       PopupMenuItem(value: 'winter', child: Text('Winter')),
-                                      PopupMenuItem(value: 'sale', child: Text('Sale')),
                                       PopupMenuItem(value: 'all', child: Text('All Products')),
                                     ],
                                     child: Padding(

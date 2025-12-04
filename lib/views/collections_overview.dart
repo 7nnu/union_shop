@@ -80,9 +80,6 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
     final allImg = sampleAllProducts.isNotEmpty ? sampleAllProducts[0].imageUrl : 'assets/images/hoodie.png';
     final saleImg = sampleSaleProducts.isNotEmpty ? sampleSaleProducts[0].imageUrl : 'assets/images/pink_beanie.png';
 
-    // responsive columns
-    final columns = isMobile ? 1 : 2;
-
     return Scaffold(
       drawer: null,
       body: Stack(
@@ -125,14 +122,17 @@ class _CollectionsOverviewPageState extends State<CollectionsOverviewPage> {
                         child: Text('Collections', textAlign: TextAlign.center, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                       ),
 
-                      // grid of collection tiles
+                      // grid of collection tiles — choose columns by available width so images sit side-by-side
                       LayoutBuilder(builder: (context, constraints) {
                         final totalWidth = constraints.maxWidth;
                         final spacing = 16.0;
+                        // responsive columns: 1 on mobile, 3 on wide screens, 2 otherwise
+                        final columns = totalWidth > 1100 ? 3 : (totalWidth > 700 ? 2 : 1);
                         final itemWidth = (totalWidth - (spacing * (columns - 1))) / columns;
+
                         return Center(
                           child: ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 1200),
+                            constraints: const BoxConstraints(maxWidth: 1200),
                             child: Wrap(
                               spacing: spacing,
                               runSpacing: spacing,
