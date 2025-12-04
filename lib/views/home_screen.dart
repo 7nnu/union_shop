@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/views/custom_header.dart';
@@ -17,6 +18,60 @@ class _HomeScreenState extends State<HomeScreen> {
   String activeNav = 'Home';
   final Map<String, bool> _hovering = {};
   bool _mobileMenuOpen = false; // track mobile menu state
+
+  // Carousel state
+  final PageController _pageController = PageController(viewportFraction: 1.0);
+  int _currentSlide = 0;
+  bool _isPlaying = true;
+  Timer? _slideTimer;
+
+  final List<Map<String, dynamic>> _slides = [
+    {
+      'title': 'Essential Range - Over 20% OFF!',
+      'subtitle': 'Over 20% off our Essential Range. Come and grab yours while stock lasts!',
+      'image': 'assets/images/tshirt.png',
+      'buttonLabel': 'BROWSE COLLECTION',
+      'onPressed': (BuildContext ctx, _HomeScreenState self) => self.navigateToEssentials(ctx),
+    },
+    {
+      'title': 'Print Shack Personalisation',
+      'subtitle': 'Make it yours at The Print Shack — personalise your clothing.',
+      'image': 'assets/images/hoodie.png',
+      'buttonLabel': 'PRINT SHACK',
+      'onPressed': (BuildContext ctx, _HomeScreenState self) => self.navigateToPersonalisation(ctx),
+    },
+  ];
+
+  void _startAutoPlay() {
+    _slideTimer?.cancel();
+    _slideTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!_isPlaying) return;
+      final next = (_currentSlide + 1) % _slides.length;
+      _pageController.animateToPage(next, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    });
+  }
+
+  void _stopAutoPlay() {
+    _slideTimer?.cancel();
+    _slideTimer = null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoPlay();
+    _pageController.addListener(() {
+      final page = _pageController.page?.round() ?? 0;
+      if (page != _currentSlide) setState(() => _currentSlide = page);
+    });
+  }
+
+  @override
+  void dispose() {
+    _slideTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   // returns the list content used by both drawer and the slide-down menu
   // NOTE: returns a Column with mainAxisSize.min so the slide-down menu will size to its content
@@ -222,90 +277,102 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigateToAll: navigateToAll,
                 ),
 
-                // Hero Section
+                // Carousel hero section (Essentials + Print Shack)
                 SizedBox(
                   height: isMobile ? 320 : 475,
                   width: double.infinity,
                   child: Stack(
                     children: [
-                      // Background image
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('assets/images/tshirt.png'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.2),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Content overlay
-                      Positioned.fill(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: isMobile ? 12 : 24,
-                            right: isMobile ? 12 : 24,
-                            top: isMobile ? 40 : 80,
-                          ),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: SingleChildScrollView(
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  // ensure overlay cannot grow beyond the hero height
-                                  maxHeight: isMobile ? 280 : 420,
+                      PageView.builder(
+                        controller: _pageController,
+                        itemCount: _slides.length,
+                        itemBuilder: (ctx, idx) {
+                          final slide = _slides[idx];
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(slide['image'] as String),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Essential Range - Over 20% OFF!',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: isMobile ? 26 : 65,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        height: 1.2,
-                                      ),
-                                    ),
-                                    SizedBox(height: isMobile ? 12 : 16),
-                                    Text(
-                                      "Over 20% off our Essential Range. Come and grab yours while stock lasts!",
-                                      style: TextStyle(
-                                        fontSize: isMobile ? 14 : 24,
-                                        color: Colors.white,
-                                        height: 1.4,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: isMobile ? 20 : 32),
-                                    ElevatedButton(
-                                      onPressed: () => navigateToEssentials(context),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF4d2963),
-                                        foregroundColor: Colors.white,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: isMobile ? 12 : 24),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.zero,
+                                child: Container(color: Colors.black.withOpacity(0.25)),
+                              ),
+                              // overlay content
+                              Padding(
+                                padding: EdgeInsets.only(left: isMobile ? 12 : 24, right: isMobile ? 12 : 24, top: isMobile ? 40 : 80),
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(maxHeight: isMobile ? 280 : 420),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(slide['title'] as String, textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 26 : 50, fontWeight: FontWeight.bold, color: Colors.white)),
+                                        SizedBox(height: isMobile ? 10 : 14),
+                                        Text(slide['subtitle'] as String, textAlign: TextAlign.center, style: TextStyle(fontSize: isMobile ? 14 : 20, color: Colors.white70)),
+                                        SizedBox(height: isMobile ? 14 : 24),
+                                        ElevatedButton(
+                                          onPressed: () => (slide['onPressed'] as Function)(context, this),
+                                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4d2963), foregroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 18, vertical: isMobile ? 12 : 16)),
+                                          child: Text(slide['buttonLabel'] as String, style: const TextStyle(fontWeight: FontWeight.bold)),
                                         ),
-                                      ),
-                                      child: const Text(
-                                        'BROWSE COLLECTION',
-                                        style: TextStyle(fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
+                            ],
+                          );
+                        },
+                      ),
+
+                      // controls: prev/next and dots + pause/play at bottom center
+                      Positioned(
+                        bottom: isMobile ? 12 : 18,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.chevron_left, color: Colors.white),
+                              onPressed: () {
+                                final prev = (_currentSlide - 1 + _slides.length) % _slides.length;
+                                _pageController.animateToPage(prev, duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
+                              },
                             ),
-                          ),
+                            Row(
+                              children: List.generate(_slides.length, (i) {
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                                  width: i == _currentSlide ? 12 : 8,
+                                  height: i == _currentSlide ? 12 : 8,
+                                  decoration: BoxDecoration(color: i == _currentSlide ? Colors.white : Colors.white54, shape: BoxShape.circle),
+                                );
+                              }),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.chevron_right, color: Colors.white),
+                              onPressed: () {
+                                final next = (_currentSlide + 1) % _slides.length;
+                                _pageController.animateToPage(next, duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
+                              },
+                            ),
+                            const SizedBox(width: 12),
+                            IconButton(
+                              icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow, color: Colors.white),
+                              onPressed: () {
+                                setState(() {
+                                  _isPlaying = !_isPlaying;
+                                  if (_isPlaying) _startAutoPlay(); else _stopAutoPlay();
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ],
